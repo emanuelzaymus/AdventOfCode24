@@ -2,15 +2,18 @@ namespace AdventOfCode24.Day01;
 
 public static class LocationIds
 {
+    /*
+     * https://adventofcode.com/2024/day/1
+     */
     public static void Run()
     {
         var input = File.ReadAllText("Data/day01.txt");
         var result = CalculateDistanceSum(input);
-        
+
         Console.WriteLine(result); // 2285373
     }
 
-    public static int CalculateDistanceSum(string input) 
+    public static int CalculateDistanceSum(string input)
     {
         var firstColumnNumber = input
             .Split('\n')

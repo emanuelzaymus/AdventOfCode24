@@ -1,4 +1,5 @@
-﻿
-using AdventOfCode24.Day01;
+﻿using AdventOfCode24.Day01;
 
-LocationIds.Run();
+// Day 1
+// LocationIds.RunTask1();
+LocationIds.RunTask2();

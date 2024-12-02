@@ -20,8 +20,16 @@ public class LocationIdsTest
     [TestMethod]
     public void CalculateDistanceSum_ExampleInput_ShouldReturnCorrectResult()
     {
-        var calculateDistanceSum = LocationIds.CalculateDistanceSum(ExampleInput);
+        var distanceSum = LocationIds.CalculateDistanceSum(ExampleInput);
 
-        Assert.AreEqual(11, calculateDistanceSum);
+        Assert.AreEqual(11, distanceSum);
+    }
+
+    [TestMethod]
+    public void CalculateSimilarityScore_ExampleInput_ShouldReturnCorrectResult()
+    {
+        var similarityScore = LocationIds.CalculateSimilarityScore(ExampleInput);
+
+        Assert.AreEqual(31, similarityScore);
     }
 }

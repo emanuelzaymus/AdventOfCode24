@@ -56,7 +56,7 @@ public static class MultiplicationExtractor
 
     public static long MultiplicationSumWithDisabling(string input)
     {
-        var multiplicationInstructions = new List<(bool enbled, int firstNumber, int secondNumber)>();
+        var multiplicationInstructions = new List<(bool enabled, int firstNumber, int secondNumber)>();
 
         var instructionsEnabled = true;
         var startIndex = 0;
@@ -90,15 +90,12 @@ public static class MultiplicationExtractor
                     instructionsEnabled = false;
                     break;
                 }
-                default:
-                {
-                    throw new Exception("Unknown instruction");
-                }
+                default: throw new Exception("Unknown instruction");
             }
         }
 
         return multiplicationInstructions
-            .Where(pair => pair.enbled)
+            .Where(pair => pair.enabled)
             .Select(pair => (long)pair.firstNumber * pair.secondNumber)
             .Sum();
     }

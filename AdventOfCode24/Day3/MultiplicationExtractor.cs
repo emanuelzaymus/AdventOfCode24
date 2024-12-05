@@ -24,8 +24,8 @@ public static class MultiplicationExtractor
             var firstNumberStartIndex = mulWordIndex + 4;
             var commaIndex = input.IndexOf(',', firstNumberStartIndex);
 
-            if (!int.TryParse(input.AsSpan(firstNumberStartIndex, commaIndex - firstNumberStartIndex),
-                    out var firstNumber))
+            var firstNumberStr = input.AsSpan(firstNumberStartIndex, commaIndex - firstNumberStartIndex);
+            if (!int.TryParse(firstNumberStr, out var firstNumber))
             {
                 continue;
             }
@@ -33,8 +33,8 @@ public static class MultiplicationExtractor
             var secondNumberStartIndex = commaIndex + 1;
             var endParenthesesIndex = input.IndexOf(')', secondNumberStartIndex);
 
-            if (!int.TryParse(input.AsSpan(secondNumberStartIndex, endParenthesesIndex - secondNumberStartIndex),
-                    out var secondNumber))
+            var secondNumberStr = input.AsSpan(secondNumberStartIndex, endParenthesesIndex - secondNumberStartIndex);
+            if (!int.TryParse(secondNumberStr, out var secondNumber))
             {
                 continue;
             }

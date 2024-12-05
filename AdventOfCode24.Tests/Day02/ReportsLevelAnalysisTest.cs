@@ -24,4 +24,132 @@ public class ReportsLevelAnalysisTest
 
         Assert.AreEqual(2, numberOfSafeReports);
     }
+
+    [TestMethod]
+    public void NumberOfSafeReportsWithProblemDampener_ExampleInput_ShouldReturnCorrectResult()
+    {
+        var numberOfSafeReports = ReportsLevelAnalysis.NumberOfSafeReportsWithProblemDampener(ExampleInput);
+
+        Assert.AreEqual(4, numberOfSafeReports);
+    }
+
+    [TestMethod]
+    public void NumberOfSafeReportsWithProblemDampener_ValidRow_ShouldReturn1()
+    {
+        var numberOfSafeReports = ReportsLevelAnalysis.NumberOfSafeReportsWithProblemDampener("1 2 3 4 5");
+
+        Assert.AreEqual(1, numberOfSafeReports);
+    }
+
+    [TestMethod]
+    public void NumberOfSafeReportsWithProblemDampener_FirstNumberInvalid_ShouldReturn1()
+    {
+        var numberOfSafeReports = ReportsLevelAnalysis.NumberOfSafeReportsWithProblemDampener("10 2 3 4 5");
+
+        Assert.AreEqual(1, numberOfSafeReports);
+    }
+
+    [TestMethod]
+    public void NumberOfSafeReportsWithProblemDampener_SecondNumberInvalid_ShouldReturn1()
+    {
+        var numberOfSafeReports = ReportsLevelAnalysis.NumberOfSafeReportsWithProblemDampener("1 10 3 4 5");
+
+        Assert.AreEqual(1, numberOfSafeReports);
+    }
+
+    [TestMethod]
+    public void NumberOfSafeReportsWithProblemDampener_ThirdNumberInvalid_ShouldReturn1()
+    {
+        var numberOfSafeReports = ReportsLevelAnalysis.NumberOfSafeReportsWithProblemDampener("1 2 10 4 5");
+
+        Assert.AreEqual(1, numberOfSafeReports);
+    }
+
+    [TestMethod]
+    public void NumberOfSafeReportsWithProblemDampener_LastButOneNumberInvalid_ShouldReturn1()
+    {
+        var numberOfSafeReports = ReportsLevelAnalysis.NumberOfSafeReportsWithProblemDampener("1 2 3 10 5");
+
+        Assert.AreEqual(1, numberOfSafeReports);
+    }
+    
+    [TestMethod]
+    public void NumberOfSafeReportsWithProblemDampener_LastNumberInvalid_ShouldReturn1()
+    {
+        var numberOfSafeReports = ReportsLevelAnalysis.NumberOfSafeReportsWithProblemDampener("1 2 3 4 10");
+
+        Assert.AreEqual(1, numberOfSafeReports);
+    }
+
+    [TestMethod]
+    public void NumberOfSafeReportsWithProblemDampener_Jump_ShouldReturn0()
+    {
+        var numberOfSafeReports = ReportsLevelAnalysis.NumberOfSafeReportsWithProblemDampener("1 2 3 10 11 12");
+
+        Assert.AreEqual(0, numberOfSafeReports);
+    }
+
+    [TestMethod]
+    public void NumberOfSafeReportsWithProblemDampener_FirstTwoNumbersInvalid_ShouldReturn0()
+    {
+        var numberOfSafeReports = ReportsLevelAnalysis.NumberOfSafeReportsWithProblemDampener("10 9 3 4 5");
+
+        Assert.AreEqual(0, numberOfSafeReports);
+    }
+
+    [TestMethod]
+    public void NumberOfSafeReportsWithProblemDampener_SecondTwoNumbersInvalid_ShouldReturn0()
+    {
+        var numberOfSafeReports = ReportsLevelAnalysis.NumberOfSafeReportsWithProblemDampener("1 10 9 2 3 4 5");
+
+        Assert.AreEqual(0, numberOfSafeReports);
+    }
+
+    [TestMethod]
+    public void NumberOfSafeReportsWithProblemDampener_ThirdTwoNumbersInvalid_ShouldReturn0()
+    {
+        var numberOfSafeReports = ReportsLevelAnalysis.NumberOfSafeReportsWithProblemDampener("0 1 10 9 2 3 4 5");
+
+        Assert.AreEqual(0, numberOfSafeReports);
+    }
+
+    [TestMethod]
+    public void NumberOfSafeReportsWithProblemDampener_LastButOneTwoNumbersInvalid_ShouldReturn0()
+    {
+        var numberOfSafeReports = ReportsLevelAnalysis.NumberOfSafeReportsWithProblemDampener("0 1 2 10 9 5");
+
+        Assert.AreEqual(0, numberOfSafeReports);
+    }
+
+    [TestMethod]
+    public void NumberOfSafeReportsWithProblemDampener_LastTwoNumbersInvalid_ShouldReturn0()
+    {
+        var numberOfSafeReports = ReportsLevelAnalysis.NumberOfSafeReportsWithProblemDampener("0 1 2 10 9");
+
+        Assert.AreEqual(0, numberOfSafeReports);
+    }
+
+    [TestMethod]
+    public void NumberOfSafeReportsWithProblemDampener_TwoNumbersInvalid_ShouldReturn0()
+    {
+        var numberOfSafeReports = ReportsLevelAnalysis.NumberOfSafeReportsWithProblemDampener("10 1 9 3 4 5");
+
+        Assert.AreEqual(0, numberOfSafeReports);
+    }
+
+    [TestMethod]
+    public void NumberOfSafeReportsWithProblemDampener_TwoDifferentNumbersInvalid_ShouldReturn0()
+    {
+        var numberOfSafeReports = ReportsLevelAnalysis.NumberOfSafeReportsWithProblemDampener("1 10 2 9 3 4 5");
+
+        Assert.AreEqual(0, numberOfSafeReports);
+    }
+
+    [TestMethod]
+    public void NumberOfSafeReportsWithProblemDampener_TwoDifferentNumbersInvalidFromEnd_ShouldReturn0()
+    {
+        var numberOfSafeReports = ReportsLevelAnalysis.NumberOfSafeReportsWithProblemDampener("1 2 3 10 4 9");
+
+        Assert.AreEqual(0, numberOfSafeReports);
+    }
 }

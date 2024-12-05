@@ -1,5 +1,8 @@
 namespace AdventOfCode24.Day3;
 
+/// <summary>
+/// https://adventofcode.com/2024/day/3
+/// </summary>
 public static class MultiplicationExtractor
 {
     private static string Input => File.ReadAllText("Data/day03.txt");

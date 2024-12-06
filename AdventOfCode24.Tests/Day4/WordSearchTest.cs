@@ -61,8 +61,16 @@ public class WordSearchTest
     [TestMethod]
     public void FindWordsRisingDiagonally_ExampleInput_ShouldReturnCorrectResult()
     {
-        var wordsDescendingDiagonally = WordSearch.FindWordsRisingDiagonally(_grid, Word, WordBackwards);
+        var wordsRisingDiagonally = WordSearch.FindWordsRisingDiagonally(_grid, Word, WordBackwards);
 
-        Assert.AreEqual(5, wordsDescendingDiagonally);
+        Assert.AreEqual(5, wordsRisingDiagonally);
+    }
+
+    [TestMethod]
+    public void CountWordMasInXForm_ExampleInput_ShouldReturnCorrectResult()
+    {
+        var wordMasInXForm = WordSearch.CountWordMasInXForm(ExampleInput);
+
+        Assert.AreEqual(9, wordMasInXForm);
     }
 }

@@ -114,4 +114,51 @@ public static class WordSearch
 
         return result;
     }
+
+    public static void RunTask2()
+    {
+        var count = CountWordMasInXForm(Input);
+
+        Console.WriteLine(count); // 2000
+    }
+
+    public static int CountWordMasInXForm(string input)
+    {
+        const string word = "MAS";
+        const string wordBackwards = "SAM";
+
+        var grid = input.Split('\n');
+
+        var verticalLenght = grid.Length - word.Length + 1;
+        var horizontalLenght = grid[0].Length - word.Length + 1;
+
+        Span<char> diagonal = stackalloc char[word.Length];
+
+        var result = 0;
+        for (var i = 0; i < verticalLenght; i++)
+        {
+            for (var j = 0; j < horizontalLenght; j++)
+            {
+                for (var k = 0; k < word.Length; k++)
+                {
+                    diagonal[k] = grid[i + k][j + k];
+                }
+
+                if (!diagonal.SequenceEqual(word) && !diagonal.SequenceEqual(wordBackwards))
+                {
+                    continue;
+                }
+
+                var otherChar1 = grid[i + 2][j];
+                var otherChar2 = grid[i][j + 2];
+
+                if (otherChar1 == 'M' && otherChar2 == 'S' || otherChar1 == 'S' && otherChar2 == 'M')
+                {
+                    result++;
+                }
+            }
+        }
+
+        return result;
+    }
 }

@@ -1,3 +1,5 @@
+using System.Text.RegularExpressions;
+
 namespace AdventOfCode24.Day4;
 
 public static class WordSearch
@@ -8,7 +10,7 @@ public static class WordSearch
     {
         var count = CountWordXmas(Input);
 
-        Console.WriteLine(count); // 
+        Console.WriteLine(count); // 2646
     }
 
     public static int CountWordXmas(string input)
@@ -18,33 +20,32 @@ public static class WordSearch
 
         var grid = input.Split('\n');
 
-        var horizontally = FindWordsHorizontally(grid, word) + FindWordsHorizontally(grid, wordBackwards);
-        var vertically = FindWordsVertically(grid, word) + FindWordsVertically(grid, wordBackwards);
-        var descendingDiagonally = FindWordsDescendingDiagonally(grid, word)
-                                   + FindWordsDescendingDiagonally(grid, wordBackwards);
+        var horizontally = FindWordsHorizontally(grid, word, wordBackwards);
+        var vertically = FindWordsVertically(grid, word, wordBackwards);
+        var descendingDiagonally = FindWordsDescendingDiagonally(grid, word, wordBackwards);
         var risingDiagonally = FindWordsRisingDiagonally(grid, word) + FindWordsRisingDiagonally(grid, wordBackwards);
 
         return horizontally + vertically + descendingDiagonally + risingDiagonally;
     }
 
-    public static int FindWordsHorizontally(string[] grid, string word) =>
-        grid.AsEnumerable()
-            .Sum(row => FindWordCount(row, word));
-
-    private static int FindWordCount(ReadOnlySpan<char> chars, string word)
+    public static int FindWordsHorizontally(string[] grid, string word, string wordBackwards)
     {
-        var index = 0;
         var result = 0;
-        while ((index = chars[index..chars.Length].IndexOf(word)) != -1)
+        foreach (var row in grid)
         {
-            index += word.Length;
-            result++;
+            result += FindWordCount(row, word);
+            result += FindWordCount(row, wordBackwards);
         }
 
         return result;
     }
 
-    public static int FindWordsVertically(string[] grid, string word)
+    private static int FindWordCount(ReadOnlySpan<char> chars, string word)
+    {
+        return Regex.Matches(chars.ToString(), word).Count;
+    }
+
+    public static int FindWordsVertically(string[] grid, string word, string wordBackwards)
     {
         var horizontalLenght = grid[0].Length;
         var verticalLenght = grid.Length;
@@ -60,12 +61,13 @@ public static class WordSearch
             }
 
             result += FindWordCount(column, word);
+            result += FindWordCount(column, wordBackwards);
         }
 
         return result;
     }
 
-    public static int FindWordsDescendingDiagonally(string[] grid, string word)
+    public static int FindWordsDescendingDiagonally(string[] grid, string word, string wordBackwards)
     {
         var verticalLenght = grid.Length - word.Length + 1;
         var horizontalLenght = grid[0].Length - word.Length + 1;
@@ -73,16 +75,16 @@ public static class WordSearch
         Span<char> diagonal = stackalloc char[word.Length];
 
         var result = 0;
-        for (int i = 0; i < verticalLenght; i++)
+        for (var i = 0; i < verticalLenght; i++)
         {
-            for (int j = 0; j < horizontalLenght; j++)
+            for (var j = 0; j < horizontalLenght; j++)
             {
                 for (var k = 0; k < word.Length; k++)
                 {
                     diagonal[k] = grid[i + k][j + k];
                 }
 
-                if (diagonal.SequenceEqual(word))
+                if (diagonal.SequenceEqual(word) || diagonal.SequenceEqual(wordBackwards))
                 {
                     result++;
                 }
@@ -98,9 +100,9 @@ public static class WordSearch
         var horizontalLenghtReal = grid[0].Length;
 
         var result = 0;
-        for (int i = 0; i < verticalLenght; i++)
+        for (var i = 0; i < verticalLenght; i++)
         {
-            for (int j = word.Length - 1; j < horizontalLenghtReal; j++)
+            for (var j = word.Length - 1; j < horizontalLenghtReal; j++)
             {
                 var found = word
                     .Select((c, index) => grid[i + index][j - index] == c)

@@ -37,8 +37,7 @@ public class WordSearchTest
     [TestMethod]
     public void FindWordsHorizontally_ExampleInput_ShouldReturnCorrectResult()
     {
-        var wordsHorizontally = WordSearch.FindWordsHorizontally(_grid, Word)
-                                + WordSearch.FindWordsHorizontally(_grid, WordBackwards);
+        var wordsHorizontally = WordSearch.FindWordsHorizontally(_grid, Word, WordBackwards);
 
         Assert.AreEqual(5, wordsHorizontally);
     }
@@ -46,26 +45,24 @@ public class WordSearchTest
     [TestMethod]
     public void FindWordsVertically_ExampleInput_ShouldReturnCorrectResult()
     {
-        var wordsVertically = WordSearch.FindWordsVertically(_grid, Word)
-                              + WordSearch.FindWordsVertically(_grid, WordBackwards);
+        var wordsVertically = WordSearch.FindWordsVertically(_grid, Word, WordBackwards);
 
         Assert.AreEqual(3, wordsVertically);
     }
-    
+
     [TestMethod]
     public void FindWordsDescendingDiagonally_ExampleInput_ShouldReturnCorrectResult()
     {
-        var wordsDescendingDiagonally = WordSearch.FindWordsDescendingDiagonally(_grid, Word)
-                              + WordSearch.FindWordsDescendingDiagonally(_grid, WordBackwards);
+        var wordsDescendingDiagonally = WordSearch.FindWordsDescendingDiagonally(_grid, Word, WordBackwards);
 
         Assert.AreEqual(5, wordsDescendingDiagonally);
     }
-    
+
     [TestMethod]
     public void FindWordsRisingDiagonally_ExampleInput_ShouldReturnCorrectResult()
     {
         var wordsDescendingDiagonally = WordSearch.FindWordsRisingDiagonally(_grid, Word)
-                              + WordSearch.FindWordsRisingDiagonally(_grid, WordBackwards);
+                                        + WordSearch.FindWordsRisingDiagonally(_grid, WordBackwards);
 
         Assert.AreEqual(5, wordsDescendingDiagonally);
     }

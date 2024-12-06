@@ -61,8 +61,7 @@ public class WordSearchTest
     [TestMethod]
     public void FindWordsRisingDiagonally_ExampleInput_ShouldReturnCorrectResult()
     {
-        var wordsDescendingDiagonally = WordSearch.FindWordsRisingDiagonally(_grid, Word)
-                                        + WordSearch.FindWordsRisingDiagonally(_grid, WordBackwards);
+        var wordsDescendingDiagonally = WordSearch.FindWordsRisingDiagonally(_grid, Word, WordBackwards);
 
         Assert.AreEqual(5, wordsDescendingDiagonally);
     }

@@ -60,14 +60,11 @@ public static class PagePrinter
         return true;
     }
 
-    private static Dictionary<int, HashSet<int>> ParseRules(string rulesString)
-    {
-        var rules = new Dictionary<int, HashSet<int>>();
+    private static Dictionary<int, HashSet<int>> ParseRules(string rulesString) =>
         rulesString
             .Split("\n")
             .Select(rule => rule.Split("|"))
-            .ToList()
-            .ForEach(rulePair =>
+            .Aggregate(new Dictionary<int, HashSet<int>>(), (rules, rulePair) =>
             {
                 var first = int.Parse(rulePair[0]);
                 var second = int.Parse(rulePair[1]);
@@ -77,18 +74,16 @@ public static class PagePrinter
                 {
                     rules[first].Add(second);
                 }
-            }); // TODO: try aggregate
-        return rules;
-    }
 
-    private static int[][] ParseUpdates(string pagesString)
-    {
-        return pagesString
+                return rules;
+            });
+
+    private static int[][] ParseUpdates(string pagesString) =>
+        pagesString
             .Split("\n")
             .Select(line => line.Split(',')
                 .Select(int.Parse)
                 .ToArray()
             )
             .ToArray();
-    }
 }

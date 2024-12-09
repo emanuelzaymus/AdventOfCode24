@@ -46,4 +46,12 @@ public class PagePrinterTest
 
         Assert.AreEqual(143, sum);
     }
+
+    [TestMethod]
+    public void SumOfMiddlePagesInCorrectedIncorrectUpdates_ExampleInput_ShouldReturnCorrectResult()
+    {
+        var sum = PagePrinter.SumOfMiddlePagesInCorrectedIncorrectUpdates(ExampleInput);
+
+        Assert.AreEqual(123, sum);
+    }
 }

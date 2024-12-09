@@ -16,11 +16,9 @@ public static class PagePrinter
 
     public static int SumOfMiddlePagesInCorrectUpdates(string input)
     {
-        var split = input.Split("\n\n");
-        var rules = ParseRules(split[0]);
-        var updates = ParseUpdates(split[1]);
+        var (rules, updates) = ParseRulesAndUpdates(input);
 
-        var correctUpdates = FindCorrectUpdates(rules, updates);
+        var correctUpdates = FindUpdates(rules, updates, true);
 
         return correctUpdates
             .Sum(u =>
@@ -30,10 +28,36 @@ public static class PagePrinter
             });
     }
 
-    private static List<int[]> FindCorrectUpdates(Dictionary<int, HashSet<int>> rules, int[][] updates)
+    public static void RunTask2()
+    {
+        var sum = SumOfMiddlePagesInCorrectedIncorrectUpdates(Input);
+
+        Console.WriteLine(sum); // 5346
+    }
+
+    public static int SumOfMiddlePagesInCorrectedIncorrectUpdates(string input)
+    {
+        var (rules, updates) = ParseRulesAndUpdates(input);
+
+        var incorrectUpdates = FindUpdates(rules, updates, false);
+
+        foreach (var incorrectUpdate in incorrectUpdates)
+        {
+            Array.Sort(incorrectUpdate, (first, second) => CompareBasedOnRules(rules, first, second));
+        }
+
+        return incorrectUpdates
+            .Sum(u =>
+            {
+                var middleIndex = u.Length / 2;
+                return u[middleIndex];
+            });
+    }
+
+    private static List<int[]> FindUpdates(Dictionary<int, HashSet<int>> rules, int[][] updates, bool correct)
     {
         return updates
-            .Where(update => IsCorrectUpdate(rules, update))
+            .Where(update => correct ? IsCorrectUpdate(rules, update) : !IsCorrectUpdate(rules, update))
             .ToList();
     }
 
@@ -58,6 +82,29 @@ public static class PagePrinter
         }
 
         return true;
+    }
+
+    private static int CompareBasedOnRules(Dictionary<int, HashSet<int>> rules, int first, int second)
+    {
+        if (rules.TryGetValue(first, out var firstRules) && firstRules.Contains(second))
+        {
+            return -1;
+        }
+
+        if (rules.TryGetValue(second, out var secondRules) && secondRules.Contains(first))
+        {
+            return 1;
+        }
+
+        return 0;
+    }
+
+    private static (Dictionary<int, HashSet<int>> rules, int[][] updates) ParseRulesAndUpdates(string input)
+    {
+        var split = input.Split("\n\n");
+        var rules = ParseRules(split[0]);
+        var updates = ParseUpdates(split[1]);
+        return (rules, updates);
     }
 
     private static Dictionary<int, HashSet<int>> ParseRules(string rulesString) =>

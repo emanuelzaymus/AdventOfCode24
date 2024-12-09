@@ -2,6 +2,9 @@ using System.Text.RegularExpressions;
 
 namespace AdventOfCode24.Day4;
 
+/// <summary>
+/// https://adventofcode.com/2024/day/4
+/// </summary>
 public static class WordSearch
 {
     private static string Input => File.ReadAllText("Data/day04.txt");

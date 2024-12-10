@@ -1,8 +1,8 @@
-using AdventOfCode24.Day4;
+using AdventOfCode24.Day04;
 using JetBrains.Annotations;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace AdventOfCode24.Tests.Day4;
+namespace AdventOfCode24.Tests.Day04;
 
 [TestClass]
 [TestSubject(typeof(WordSearch))]

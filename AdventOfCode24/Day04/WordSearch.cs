@@ -1,6 +1,6 @@
 using System.Text.RegularExpressions;
 
-namespace AdventOfCode24.Day4;
+namespace AdventOfCode24.Day04;
 
 /// <summary>
 /// https://adventofcode.com/2024/day/4

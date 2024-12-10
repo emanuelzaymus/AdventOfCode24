@@ -1,8 +1,8 @@
-using AdventOfCode24.Day5;
+using AdventOfCode24.Day05;
 using JetBrains.Annotations;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace AdventOfCode24.Tests.Day5;
+namespace AdventOfCode24.Tests.Day05;
 
 [TestClass]
 [TestSubject(typeof(PagePrinter))]

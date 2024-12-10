@@ -1,4 +1,4 @@
-namespace AdventOfCode24.Day3;
+namespace AdventOfCode24.Day03;
 
 /// <summary>
 /// https://adventofcode.com/2024/day/3

@@ -1,8 +1,8 @@
-using AdventOfCode24.Day3;
+using AdventOfCode24.Day03;
 using JetBrains.Annotations;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace AdventOfCode24.Tests.Day3;
+namespace AdventOfCode24.Tests.Day03;
 
 [TestClass]
 [TestSubject(typeof(MultiplicationExtractor))]

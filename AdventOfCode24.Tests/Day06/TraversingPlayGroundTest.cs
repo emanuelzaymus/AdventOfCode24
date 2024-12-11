@@ -28,4 +28,12 @@ public class TraversingPlayGroundTest
 
         Assert.AreEqual(41, visitedPositions);
     }
+
+    [TestMethod]
+    public void ObstructionsThatCauseLoops_ExampleInput_ShouldReturnCorrectResult()
+    {
+        var obstructionsThatCauseLoops = TraversingPlayGround.ObstructionsThatCauseLoops(ExampleInput);
+
+        Assert.AreEqual(6, obstructionsThatCauseLoops);
+    }
 }

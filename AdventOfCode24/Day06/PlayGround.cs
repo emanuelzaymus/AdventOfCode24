@@ -7,6 +7,7 @@ internal class PlayGround
     private const char ObstructionChar = '#';
 
     private readonly List<List<char>> _playGround;
+    private readonly List<List<Direction?>> _visitedWithDirections;
     private readonly int _height;
     private readonly int _width;
     internal readonly Position InitialPosition;
@@ -17,6 +18,11 @@ internal class PlayGround
         _playGround = playGroundString
             .Split(Environment.NewLine)
             .Select(row => row.ToList())
+            .ToList();
+        _visitedWithDirections = _playGround
+            .Select(row => row
+                .Select<char, Direction?>(_ => null)
+                .ToList())
             .ToList();
         _height = _playGround.Count;
         _width = _playGround[0].Count;
@@ -34,9 +40,20 @@ internal class PlayGround
                && position.ColumnIndex < _width;
     }
 
-    public void SetVisited(Position currentPosition)
+    public void SetVisited(Position position)
     {
-        _playGround[currentPosition.RowIndex][currentPosition.ColumnIndex] = VisitedChar;
+        _playGround[position.RowIndex][position.ColumnIndex] = VisitedChar;
+    }
+
+    public void SetVisited(Position position, Direction direction)
+    {
+        SetVisited(position);
+        _visitedWithDirections[position.RowIndex][position.ColumnIndex] = direction;
+    }
+
+    public void SetObstruction(Position position)
+    {
+        _playGround[position.RowIndex][position.ColumnIndex] = ObstructionChar;
     }
 
     public int GetCountOfVisitedPositions()
@@ -44,9 +61,29 @@ internal class PlayGround
         return _playGround.Sum(row => row.Count(c => c == VisitedChar));
     }
 
+    public bool IsVisited(Position position, Direction direction)
+    {
+        return _playGround[position.RowIndex][position.ColumnIndex] == VisitedChar
+               && _visitedWithDirections[position.RowIndex][position.ColumnIndex] == direction;
+    }
+
     public bool IsObstruction(Position position)
     {
         return _playGround[position.RowIndex][position.ColumnIndex] == ObstructionChar;
+    }
+
+    public IEnumerable<Position> GetVisitedPositions()
+    {
+        for (var row = 0; row < _height; row++)
+        {
+            for (var col = 0; col < _width; col++)
+            {
+                if (_playGround[row][col] == VisitedChar)
+                {
+                    yield return new Position(row, col);
+                }
+            }
+        }
     }
 
     public override string ToString()

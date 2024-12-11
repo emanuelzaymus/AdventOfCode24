@@ -50,7 +50,7 @@ public static class TraversingPlayGround
     {
         var obstructionsThatCauseLoops = ObstructionsThatCauseLoops(Input);
 
-        Console.WriteLine(obstructionsThatCauseLoops); // 
+        Console.WriteLine(obstructionsThatCauseLoops); // 1784
     }
 
     public static int ObstructionsThatCauseLoops(string input)

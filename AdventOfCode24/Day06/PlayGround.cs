@@ -7,7 +7,7 @@ internal class PlayGround
     private const char ObstructionChar = '#';
 
     private readonly List<List<char>> _playGround;
-    private readonly List<List<Direction?>> _visitedWithDirections;
+    private readonly List<List<HashSet<Direction>>> _visitedWithDirections;
     private readonly int _height;
     private readonly int _width;
     internal readonly Position InitialPosition;
@@ -21,7 +21,7 @@ internal class PlayGround
             .ToList();
         _visitedWithDirections = _playGround
             .Select(row => row
-                .Select<char, Direction?>(_ => null)
+                .Select(_ => new HashSet<Direction>())
                 .ToList())
             .ToList();
         _height = _playGround.Count;
@@ -48,7 +48,7 @@ internal class PlayGround
     public void SetVisited(Position position, Direction direction)
     {
         SetVisited(position);
-        _visitedWithDirections[position.RowIndex][position.ColumnIndex] = direction;
+        _visitedWithDirections[position.RowIndex][position.ColumnIndex].Add(direction);
     }
 
     public void SetObstruction(Position position)
@@ -64,7 +64,7 @@ internal class PlayGround
     public bool IsVisited(Position position, Direction direction)
     {
         return _playGround[position.RowIndex][position.ColumnIndex] == VisitedChar
-               && _visitedWithDirections[position.RowIndex][position.ColumnIndex] == direction;
+               && _visitedWithDirections[position.RowIndex][position.ColumnIndex].Contains(direction);
     }
 
     public bool IsObstruction(Position position)

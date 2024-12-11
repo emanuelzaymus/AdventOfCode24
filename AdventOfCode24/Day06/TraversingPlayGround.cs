@@ -27,11 +27,11 @@ public static class TraversingPlayGround
 
             playGround.SetVisited(currentPosition);
 
-            var nextPossiblePosition = currentDirection.Move(currentPosition);
+            var nextPossiblePosition = currentPosition.Move(currentDirection);
 
             if (playGround.Contains(nextPossiblePosition) && playGround.IsObstruction(nextPossiblePosition))
             {
-                currentDirection = currentDirection.GetDirectionTurnedRight();
+                currentDirection = currentDirection.TurnRight();
                 continue;
             }
 

@@ -27,4 +27,12 @@ public class CalibrationEquationsTest
 
         Assert.AreEqual(3749, sum);
     }
+
+    [TestMethod]
+    public void SumOfPossibleCalibrationEquationsWithConcatenation_ExampleInput_ShouldReturnCorrectResult()
+    {
+        var sum = CalibrationEquations.SumOfPossibleCalibrationEquationsWithConcatenation(ExampleInput);
+
+        Assert.AreEqual(11387, sum);
+    }
 }

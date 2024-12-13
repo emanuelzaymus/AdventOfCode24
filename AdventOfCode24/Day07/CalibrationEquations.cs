@@ -30,7 +30,7 @@ public static class CalibrationEquations
 
     public static long SumOfPossibleCalibrationEquationsWithConcatenation(string input)
     {
-        return SumOfPossibleCalibrationEquations(input, [Sum, Multiply, Cancat]);
+        return SumOfPossibleCalibrationEquations(input, [Sum, Multiply, Concat]);
     }
 
     private static long SumOfPossibleCalibrationEquations(string input, Operation[] possibleOperations)
@@ -70,8 +70,7 @@ public static class CalibrationEquations
 
     private static long Multiply(long a, long b) => a * b;
 
-    // ReSharper disable once IdentifierTypo
-    private static long Cancat(long a, long b)
+    private static long Concat(long a, long b)
     {
         var numberOfDigitsOfB = (long)Math.Floor(Math.Log10(b) + 1);
         var multiplicationCoefficientForA = (long)Math.Pow(10, numberOfDigitsOfB);

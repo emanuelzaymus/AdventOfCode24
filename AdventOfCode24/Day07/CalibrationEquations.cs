@@ -2,6 +2,9 @@ namespace AdventOfCode24.Day07;
 
 using Operation = Func<long, long, long>;
 
+/// <summary>
+/// https://adventofcode.com/2024/day/7
+/// </summary>
 public static class CalibrationEquations
 {
     private static string Input => File.ReadAllText("Data/day07.txt");
@@ -15,29 +18,29 @@ public static class CalibrationEquations
 
     public static long SumOfPossibleCalibrationEquations(string input)
     {
-        return SumOfPossibleCalibrationEquations(input, 2);
+        return SumOfPossibleCalibrationEquations(input, [Sum, Multiply]);
     }
 
     public static void RunTask2()
     {
         var sum = SumOfPossibleCalibrationEquationsWithConcatenation(Input);
 
-        Console.WriteLine(sum); // 
+        Console.WriteLine(sum); // 110365987435001
     }
 
     public static long SumOfPossibleCalibrationEquationsWithConcatenation(string input)
     {
-        return SumOfPossibleCalibrationEquations(input, 3);
+        return SumOfPossibleCalibrationEquations(input, [Sum, Multiply, Cancat]);
     }
 
-    private static long SumOfPossibleCalibrationEquations(string input, int operationsCount)
+    private static long SumOfPossibleCalibrationEquations(string input, Operation[] possibleOperations)
     {
         var equations = ParsEquations(input);
 
         long resultSum = 0;
         foreach (var equation in equations)
         {
-            foreach (var operations in AllOperationCombinations(equation.Operands.Count, operationsCount))
+            foreach (var operations in Combinations.AllCombinations(equation.Operands.Count - 1, possibleOperations))
             {
                 var equationResult = equation.Operands[0];
                 var i = 1;
@@ -60,32 +63,6 @@ public static class CalibrationEquations
         }
 
         return resultSum;
-    }
-
-    private static List<Operation> AllOperations = [Sum, Multiply, Cancat];
-
-    private static IEnumerable<Operation[]> AllOperationCombinations(int numberOfOperands, int operationsCount)
-    {
-        var numberOfOperations = numberOfOperands - 1;
-        var result = new Operation[numberOfOperations];
-
-        var allCombinationsCount = Math.Pow(operationsCount, numberOfOperations);
-        for (var i = 0; i < allCombinationsCount; i++)
-        {
-            var combination = Convert.ToString(i, operationsCount).PadLeft(numberOfOperations, '0');
-            for (var j = 0; j < numberOfOperations; j++)
-            {
-                result[j] = combination[j] switch
-                {
-                    '0' => Sum,
-                    '1' => Multiply,
-                    '2' => Cancat,
-                    _ => throw new ArgumentOutOfRangeException(nameof(operationsCount))
-                };
-            }
-
-            yield return result;
-        }
     }
 
     private static long Sum(long a, long b) => a + b;

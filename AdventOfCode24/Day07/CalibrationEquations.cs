@@ -54,6 +54,7 @@ public static class CalibrationEquations
                     }
                 }
 
+                // ReSharper disable once InvertIf
                 if (equationResult == equation.Result)
                 {
                     resultSum += equationResult;
@@ -69,6 +70,7 @@ public static class CalibrationEquations
 
     private static long Multiply(long a, long b) => a * b;
 
+    // ReSharper disable once IdentifierTypo
     private static long Cancat(long a, long b)
     {
         var numberOfDigitsOfB = (long)Math.Floor(Math.Log10(b) + 1);

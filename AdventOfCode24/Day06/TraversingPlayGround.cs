@@ -1,5 +1,8 @@
 namespace AdventOfCode24.Day06;
 
+/// <summary>
+/// https://adventofcode.com/2024/day/6
+/// </summary>
 public static class TraversingPlayGround
 {
     private static string Input => File.ReadAllText("Data/day06.txt");

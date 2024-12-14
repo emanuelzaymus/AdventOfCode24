@@ -21,6 +21,11 @@ internal class City(string input)
 
     public void SetAntiNode(Location location) => _containsAntiNode[location.RowIndex][location.ColumnIndex] = true;
 
+    public void SetAllAntiNode(IEnumerable<Location> locations)
+    {
+        foreach (var location in locations) SetAntiNode(location);
+    }
+
     public int CountAllAntiNodes() => _containsAntiNode
         .Sum(row => row
             .Count(b => b));

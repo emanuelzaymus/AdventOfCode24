@@ -118,13 +118,13 @@ public static class FrequencyAntiNodes
                     continue;
                 }
 
-                if (!antennas.TryGetValue(c, out var value))
+                if (!antennas.TryGetValue(c, out var newLocations))
                 {
-                    value = [];
-                    antennas.Add(c, value);
+                    newLocations = [];
+                    antennas.Add(c, newLocations);
                 }
 
-                value.Add(new Location(row, column));
+                newLocations.Add(new Location(row, column));
             }
         }
 

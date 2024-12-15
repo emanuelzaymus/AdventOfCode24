@@ -49,8 +49,8 @@ public static class DiskOptimization
                 break;
             }
 
-            disk.WriteBlockId(invalidBlockIndex, currentBlockId);
-            disk.ClearBlockId(i);
+            disk.WriteBlockId(currentBlockId, invalidBlockIndex);
+            disk.ClearBlock(index: i);
         }
     }
 
@@ -63,8 +63,8 @@ public static class DiskOptimization
             // ReSharper disable once InvertIf
             if (gapStartIndex > 0)
             {
-                disk.Write(gapStartIndex, blockSequence);
-                disk.Clear(blockSequence);
+                disk.WriteBlockIds(blockSequence.BlockId, gapStartIndex, blockSequence.Length);
+                disk.ClearBlocks(blockSequence.StartIndex, blockSequence.Length);
             }
         }
     }

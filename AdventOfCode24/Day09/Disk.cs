@@ -8,6 +8,32 @@ public class Disk(string diskMap)
 
     public int BlockCount => _blockIds.Count;
 
+    public int ReadBlockId(int index) => _blockIds[index];
+
+    public void WriteBlockId(int blockId, int index) => WriteBlockIds(blockId, index, 1);
+
+    public void WriteBlockIds(int blockId, int startIndex, int length)
+    {
+        for (var i = startIndex; i < startIndex + length; i++)
+        {
+            if (blockId != InvalidBlockId && _blockIds[i] != InvalidBlockId)
+            {
+                throw new ArgumentException($"Attempt to rewrite non-empty block at position {i}");
+            }
+
+            if (blockId == InvalidBlockId && _blockIds[i] == InvalidBlockId)
+            {
+                throw new ArgumentException($"Attempt to clear already empty block at position {i}");
+            }
+
+            _blockIds[i] = blockId;
+        }
+    }
+
+    public void ClearBlock(int index) => ClearBlocks(index, 1);
+
+    public void ClearBlocks(int startIndex, int length) => WriteBlockIds(InvalidBlockId, startIndex, length);
+
     public ICollection<BlockSequence> GetBlockSequencesFromBack()
     {
         var diskBlockSequences = new LinkedList<BlockSequence>();
@@ -52,40 +78,6 @@ public class Disk(string diskMap)
         }
 
         return -1;
-    }
-
-    public int ReadBlockId(int index) => _blockIds[index];
-
-    public void WriteBlockId(int startIndex, int blockId) => _blockIds[startIndex] = blockId;
-
-    public void ClearBlockId(int startIndex) => _blockIds[startIndex] = InvalidBlockId;
-
-    public void Write(int startIndex, BlockSequence blockSequence)
-    {
-        WriteInternal(blockSequence.BlockId, startIndex, blockSequence.Length);
-    }
-
-    public void Clear(BlockSequence blockSequence)
-    {
-        WriteInternal(InvalidBlockId, blockSequence.StartIndex, blockSequence.Length);
-    }
-
-    private void WriteInternal(int blockId, int startIndex, int length)
-    {
-        for (var i = startIndex; i < startIndex + length; i++)
-        {
-            if (blockId != InvalidBlockId && _blockIds[i] != InvalidBlockId)
-            {
-                throw new ArgumentException($"Attempt to rewrite non-empty block at position {i}");
-            }
-
-            if (blockId == InvalidBlockId && _blockIds[i] == InvalidBlockId)
-            {
-                throw new ArgumentException($"Attempt to clear already empty block at position {i}");
-            }
-
-            _blockIds[i] = blockId;
-        }
     }
 
     public long CalculateChecksum()

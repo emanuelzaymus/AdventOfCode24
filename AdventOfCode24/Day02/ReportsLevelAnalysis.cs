@@ -26,6 +26,11 @@ public static class ReportsLevelAnalysis
             .Select(int.Parse)
             .ToList();
 
+        return IsSafeReport(levels);
+    }
+
+    private static bool IsSafeReport(List<int> levels)
+    {
         return IsGraduallyIncreasing(levels) || IsGraduallyDecreasing(levels);
     }
 
@@ -52,7 +57,7 @@ public static class ReportsLevelAnalysis
     {
         var numberOfSafeReportsWithProblemDampener = NumberOfSafeReportsWithProblemDampener(Input);
 
-        Console.WriteLine(numberOfSafeReportsWithProblemDampener); // 672 is too low AND 679 is too high
+        Console.WriteLine(numberOfSafeReportsWithProblemDampener); // 674
     }
 
     public static int NumberOfSafeReportsWithProblemDampener(string input) =>
@@ -67,55 +72,17 @@ public static class ReportsLevelAnalysis
             .Select(int.Parse)
             .ToList();
 
-        return IsGraduallyIncreasingWithProblemDampener(levels.ToList())
-               || IsGraduallyDecreasingWithProblemDampener(levels.ToList());
-    }
-
-    private static bool IsGraduallyIncreasingWithProblemDampener(List<int> levels) =>
-        AllHaveGradualOffsetWithProblemDampener(levels, (first, second) => second - first);
-
-    private static bool IsGraduallyDecreasingWithProblemDampener(List<int> levels) =>
-        AllHaveGradualOffsetWithProblemDampener(levels, (first, second) => first - second);
-
-    private static bool AllHaveGradualOffsetWithProblemDampener(List<int> levels, Func<int, int, int> calculateOffset)
-    {
-        var wasOneWrong = false;
-
-        for (var i = 0; i < levels.Count - 2; i++)
+        for (var i = 0; i < levels.Count; i++)
         {
-            var first = levels[i];
-            var second = levels[i + 1];
-            var third = levels[i + 2];
+            var levelsWithDumpedSingleElement = levels.ToList();
+            levelsWithDumpedSingleElement.RemoveAt(i);
 
-            var isGradualDifference1 = IsGradualDifference(first, second, calculateOffset);
-            var isGradualDifference2 = IsGradualDifference(second, third, calculateOffset);
-
-            if (isGradualDifference1 && isGradualDifference2) continue;
-
-            if (i != levels.Count - 3 && isGradualDifference1 && !isGradualDifference2) continue;
-
-            if (wasOneWrong) return false;
-            wasOneWrong = true;
-
-            if (i == 0 && isGradualDifference2) continue;
-
-            if (i == levels.Count - 3 && isGradualDifference1) continue;
-
-            var isGradualDifference3 = IsGradualDifference(first, third, calculateOffset);
-
-            if (isGradualDifference3)
+            if (IsSafeReport(levelsWithDumpedSingleElement))
             {
-                levels.RemoveAt(i + 1);
-                i--;
-                continue;
+                return true;
             }
-
-            return false;
         }
 
-        return true;
+        return false;
     }
-
-    private static bool IsGradualDifference(int first, int second, Func<int, int, int> calculateOffset) =>
-        calculateOffset(first, second) is >= 1 and <= 3;
 }

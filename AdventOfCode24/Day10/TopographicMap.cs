@@ -1,3 +1,5 @@
+using AdventOfCode24.Common;
+
 namespace AdventOfCode24.Day10;
 
 internal class TopographicMap(string input)
@@ -8,7 +10,7 @@ internal class TopographicMap(string input)
     private readonly List<List<int>> _rows = input
         .Split(Environment.NewLine)
         .Select(row => row
-            .Select(ConvertCharToInt)
+            .Select(CharExtensions.DigitToInt)
             .ToList()
         )
         .ToList();
@@ -47,33 +49,5 @@ internal class TopographicMap(string input)
         var fromHeight = _rows[fromLocation.RowIndex][fromLocation.ColumnIndex];
         var toHeight = _rows[toLocation.RowIndex][toLocation.ColumnIndex];
         return toHeight - fromHeight == 1;
-    }
-
-    private static int ConvertCharToInt(char digit) => digit - '0';
-
-    public readonly record struct Location(int RowIndex, int ColumnIndex)
-    {
-        public Location Move(Direction direction) => new(
-            RowIndex + direction.RowOffset,
-            ColumnIndex + direction.ColumnOffset);
-    }
-
-    public class Direction
-    {
-        public static readonly Direction Up = new(-1, 0);
-        public static readonly Direction Down = new(1, 0);
-        public static readonly Direction Left = new(0, -1);
-        public static readonly Direction Right = new(0, 1);
-
-        public static List<Direction> AllDirections = [Up, Right, Down, Left];
-
-        public readonly int RowOffset;
-        public readonly int ColumnOffset;
-
-        private Direction(int rowOffset, int columnOffset)
-        {
-            RowOffset = rowOffset;
-            ColumnOffset = columnOffset;
-        }
     }
 }

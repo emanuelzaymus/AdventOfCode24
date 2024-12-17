@@ -1,3 +1,5 @@
+using AdventOfCode24.Common;
+
 namespace AdventOfCode24.Day10;
 
 public static class HikingTrails
@@ -26,7 +28,7 @@ public static class HikingTrails
 
         var reachedTrailEnds = trailStarts.ToDictionary(
             trailStart => trailStart,
-            _ => new List<TopographicMap.Location>());
+            _ => new List<Location>());
 
         foreach (var (trailStart, reachedEnds) in reachedTrailEnds)
         {
@@ -45,8 +47,8 @@ public static class HikingTrails
             .Sum(reachedEnds => reachedEnds.Count);
     }
 
-    private static void FindAllReachableTrailEnd(TopographicMap topographicMap, TopographicMap.Location currentLocation,
-        List<TopographicMap.Location> reachedEnds)
+    private static void FindAllReachableTrailEnd(TopographicMap topographicMap, Location currentLocation,
+        List<Location> reachedEnds)
     {
         if (topographicMap.IsTrailEnd(currentLocation))
         {
@@ -54,7 +56,7 @@ public static class HikingTrails
             return;
         }
 
-        foreach (var direction in TopographicMap.Direction.AllDirections)
+        foreach (var direction in Direction.AllDirections)
         {
             var newPossibleLocation = currentLocation.Move(direction);
 

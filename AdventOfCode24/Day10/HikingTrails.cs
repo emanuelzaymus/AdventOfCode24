@@ -11,7 +11,14 @@ public static class HikingTrails
         Console.WriteLine(count); // 717
     }
 
-    public static int CountOfHikingTrails(string input)
+    public static void RunTask2()
+    {
+        var count = CountOfHikingTrails(Input, countDistinctTrails: false);
+
+        Console.WriteLine(count); // 1686
+    }
+
+    public static int CountOfHikingTrails(string input, bool countDistinctTrails = true)
     {
         var topographicMap = new TopographicMap(input);
 
@@ -19,11 +26,19 @@ public static class HikingTrails
 
         var reachedTrailEnds = trailStarts.ToDictionary(
             trailStart => trailStart,
-            _ => new HashSet<TopographicMap.Location>());
+            _ => new List<TopographicMap.Location>());
 
         foreach (var (trailStart, reachedEnds) in reachedTrailEnds)
         {
             FindAllReachableTrailEnd(topographicMap, trailStart, reachedEnds);
+        }
+
+        if (countDistinctTrails)
+        {
+            return reachedTrailEnds.Values
+                .Sum(reachedEnds => reachedEnds
+                    .Distinct()
+                    .Count());
         }
 
         return reachedTrailEnds.Values
@@ -31,7 +46,7 @@ public static class HikingTrails
     }
 
     private static void FindAllReachableTrailEnd(TopographicMap topographicMap, TopographicMap.Location currentLocation,
-        HashSet<TopographicMap.Location> reachedEnds)
+        List<TopographicMap.Location> reachedEnds)
     {
         if (topographicMap.IsTrailEnd(currentLocation))
         {

@@ -41,4 +41,12 @@ public class HikingTrailsTest
 
         Assert.AreEqual(36, count);
     }
+
+    [TestMethod]
+    public void CountOfHikingTrails_ExampleInput2AndDoNotCountDistinctTrails_ShouldReturnCorrectResult()
+    {
+        var count = HikingTrails.CountOfHikingTrails(ExampleInput2, countDistinctTrails: false);
+
+        Assert.AreEqual(81, count);
+    }
 }

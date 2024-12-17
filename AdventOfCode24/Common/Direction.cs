@@ -1,6 +1,6 @@
 namespace AdventOfCode24.Common;
 
-public class Direction
+internal class Direction
 {
     public static readonly Direction Up = new(-1, 0);
     public static readonly Direction Down = new(1, 0);

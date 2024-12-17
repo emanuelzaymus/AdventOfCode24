@@ -1,3 +1,5 @@
+using AdventOfCode24.Common;
+
 namespace AdventOfCode24.Day09;
 
 public class Disk(string diskMap)
@@ -42,7 +44,7 @@ public class Disk(string diskMap)
         var currentBlockId = 0;
         var diskIndex = 0;
 
-        foreach (var currentBlockCount in diskMap.Select(ConvertCharToInt))
+        foreach (var currentBlockCount in diskMap.Select(CharExtensions.DigitToInt))
         {
             if (isBlock)
             {
@@ -95,7 +97,7 @@ public class Disk(string diskMap)
 
         var isBlock = true;
         var currentBlockId = 0;
-        foreach (var currentBlockCount in diskMap.Select(ConvertCharToInt))
+        foreach (var currentBlockCount in diskMap.Select(CharExtensions.DigitToInt))
         {
             var blockIdToWrite = InvalidBlockId;
             if (isBlock)
@@ -115,8 +117,6 @@ public class Disk(string diskMap)
     }
 
     public static bool IsValidDiskBlock(int blockId) => blockId != InvalidBlockId;
-
-    private static int ConvertCharToInt(char digit) => digit - '0';
 
     public record struct BlockSequence(int BlockId, int StartIndex, int Length);
 }

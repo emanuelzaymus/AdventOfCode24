@@ -1,6 +1,6 @@
 namespace AdventOfCode24.Common;
 
-public static class CharExtensions
+internal static class CharExtensions
 {
     public static int DigitToInt(this char digit)
     {

@@ -8,7 +8,7 @@ internal class TopographicMap(string input)
     private const int TrailEnd = 9;
 
     private readonly List<List<int>> _rows = input
-        .Split(Environment.NewLine)
+        .SplitLines()
         .Select(row => row
             .Select(CharExtensions.DigitToInt)
             .ToList()

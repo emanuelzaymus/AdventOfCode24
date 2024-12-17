@@ -1,4 +1,5 @@
 using System.Text.RegularExpressions;
+using AdventOfCode24.Common;
 
 namespace AdventOfCode24.Day04;
 
@@ -21,7 +22,7 @@ public static class WordSearch
         const string word = "XMAS";
         const string wordBackwards = "SAMX";
 
-        var grid = input.Split('\n');
+        var grid = input.SplitLines();
 
         var horizontally = FindWordsHorizontally(grid, word, wordBackwards);
         var vertically = FindWordsVertically(grid, word, wordBackwards);
@@ -130,7 +131,7 @@ public static class WordSearch
         const string word = "MAS";
         const string wordBackwards = "SAM";
 
-        var grid = input.Split('\n');
+        var grid = input.SplitLines();
 
         var verticalLenght = grid.Length - word.Length + 1;
         var horizontalLenght = grid[0].Length - word.Length + 1;

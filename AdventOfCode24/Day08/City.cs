@@ -1,13 +1,15 @@
+using AdventOfCode24.Common;
+
 namespace AdventOfCode24.Day08;
 
 internal class City(string input)
 {
     private readonly List<string> _rows = input
-        .Split(Environment.NewLine)
+        .SplitLines()
         .ToList();
 
     private readonly List<List<bool>> _containsAntiNode = input
-        .Split(Environment.NewLine)
+        .SplitLines()
         .Select(line => Enumerable
             .Repeat(false, line.Length)
             .ToList())

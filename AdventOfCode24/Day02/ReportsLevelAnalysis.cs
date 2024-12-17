@@ -1,3 +1,5 @@
+using AdventOfCode24.Common;
+
 namespace AdventOfCode24.Day02;
 
 /// <summary>
@@ -16,7 +18,7 @@ public static class ReportsLevelAnalysis
 
     public static int NumberOfSafeReports(string input) =>
         input
-            .Split('\n')
+            .SplitLines()
             .Count(IsSafeReport);
 
     private static bool IsSafeReport(string report)
@@ -62,7 +64,7 @@ public static class ReportsLevelAnalysis
 
     public static int NumberOfSafeReportsWithProblemDampener(string input) =>
         input
-            .Split('\n')
+            .SplitLines()
             .Count(IsSafeReportWithProblemDampener);
 
     private static bool IsSafeReportWithProblemDampener(string report)

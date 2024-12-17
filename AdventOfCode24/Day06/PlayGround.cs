@@ -18,7 +18,7 @@ internal class PlayGround
     public PlayGround(string playGroundString)
     {
         _playGround = playGroundString
-            .Split(Environment.NewLine)
+            .SplitLines()
             .Select(row => row.ToList())
             .ToList();
         _visitedWithDirections = _playGround

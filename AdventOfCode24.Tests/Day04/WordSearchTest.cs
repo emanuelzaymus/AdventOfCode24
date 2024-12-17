@@ -1,3 +1,4 @@
+using AdventOfCode24.Common;
 using AdventOfCode24.Day04;
 using JetBrains.Annotations;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -24,7 +25,7 @@ public class WordSearchTest
                                         MXMXAXMASX
                                         """;
 
-    private readonly string[] _grid = ExampleInput.Split('\n');
+    private readonly string[] _grid = ExampleInput.SplitLines();
 
     [TestMethod]
     public void CountWordXmas_ExampleInput_ShouldReturnCorrectResult()

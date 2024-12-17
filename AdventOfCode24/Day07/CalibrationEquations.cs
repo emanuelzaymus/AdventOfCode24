@@ -1,3 +1,5 @@
+using AdventOfCode24.Common;
+
 namespace AdventOfCode24.Day07;
 
 using Operation = Func<long, long, long>;
@@ -80,7 +82,7 @@ public static class CalibrationEquations
     private static List<Equation> ParsEquations(string input)
     {
         return input
-            .Split(Environment.NewLine)
+            .SplitLines()
             .Select(row => row.Split(": "))
             .Select(pair =>
                 new Equation(

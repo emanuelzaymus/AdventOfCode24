@@ -1,3 +1,5 @@
+using AdventOfCode24.Common;
+
 namespace AdventOfCode24.Day01;
 
 /// <summary>
@@ -28,7 +30,7 @@ public static class LocationIds
     private static List<int> GetColumnNumberList(string input, Func<string[], string> numberExtractor)
     {
         return input
-            .Split('\n')
+            .SplitLines()
             .Select(line => line.Split("   "))
             .Select(numberExtractor)
             .Select(int.Parse)

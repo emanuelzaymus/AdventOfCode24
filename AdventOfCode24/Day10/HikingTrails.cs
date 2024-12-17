@@ -24,11 +24,11 @@ public static class HikingTrails
     {
         var topographicMap = new TopographicMap(input);
 
-        var trailStarts = topographicMap.GetAllTrailStartLocations();
+        var trailStarts = topographicMap.GetAllTrailStartPositions();
 
         var reachedTrailEnds = trailStarts.ToDictionary(
             trailStart => trailStart,
-            _ => new List<Location>());
+            _ => new List<Position>());
 
         foreach (var (trailStart, reachedEnds) in reachedTrailEnds)
         {
@@ -47,23 +47,23 @@ public static class HikingTrails
             .Sum(reachedEnds => reachedEnds.Count);
     }
 
-    private static void FindAllReachableTrailEnd(TopographicMap topographicMap, Location currentLocation,
-        List<Location> reachedEnds)
+    private static void FindAllReachableTrailEnd(TopographicMap topographicMap, Position currentPosition,
+        List<Position> reachedEnds)
     {
-        if (topographicMap.IsTrailEnd(currentLocation))
+        if (topographicMap.IsTrailEnd(currentPosition))
         {
-            reachedEnds.Add(currentLocation);
+            reachedEnds.Add(currentPosition);
             return;
         }
 
         foreach (var direction in Direction.AllDirections)
         {
-            var newPossibleLocation = currentLocation.Move(direction);
+            var newPossiblePosition = currentPosition.Move(direction);
 
-            if (topographicMap.Contains(newPossibleLocation)
-                && topographicMap.IsReachable(currentLocation, newPossibleLocation))
+            if (topographicMap.Contains(newPossiblePosition)
+                && topographicMap.IsReachable(currentPosition, newPossiblePosition))
             {
-                FindAllReachableTrailEnd(topographicMap, newPossibleLocation, reachedEnds);
+                FindAllReachableTrailEnd(topographicMap, newPossiblePosition, reachedEnds);
             }
         }
     }

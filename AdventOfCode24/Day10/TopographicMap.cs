@@ -18,36 +18,36 @@ internal class TopographicMap(string input)
     private int Height => _rows.Count;
     private int Width => _rows[0].Count;
 
-    public List<Location> GetAllTrailStartLocations()
+    public List<Position> GetAllTrailStartPositions()
     {
-        var result = new List<Location>();
+        var result = new List<Position>();
 
         for (var i = 0; i < Height; i++)
         for (var j = 0; j < Width; j++)
         {
             if (_rows[i][j] == TrailStart)
             {
-                result.Add(new Location(i, j));
+                result.Add(new Position(i, j));
             }
         }
 
         return result;
     }
 
-    public bool IsTrailEnd(Location location) => _rows[location.RowIndex][location.ColumnIndex] == TrailEnd;
+    public bool IsTrailEnd(Position position) => _rows[position.RowIndex][position.ColumnIndex] == TrailEnd;
 
-    public bool Contains(Location location)
+    public bool Contains(Position position)
     {
-        return location.RowIndex >= 0
-               && location.RowIndex < Height
-               && location.ColumnIndex >= 0
-               && location.ColumnIndex < Width;
+        return position.RowIndex >= 0
+               && position.RowIndex < Height
+               && position.ColumnIndex >= 0
+               && position.ColumnIndex < Width;
     }
 
-    public bool IsReachable(Location fromLocation, Location toLocation)
+    public bool IsReachable(Position fromPosition, Position toPosition)
     {
-        var fromHeight = _rows[fromLocation.RowIndex][fromLocation.ColumnIndex];
-        var toHeight = _rows[toLocation.RowIndex][toLocation.ColumnIndex];
+        var fromHeight = _rows[fromPosition.RowIndex][fromPosition.ColumnIndex];
+        var toHeight = _rows[toPosition.RowIndex][toPosition.ColumnIndex];
         return toHeight - fromHeight == 1;
     }
 }

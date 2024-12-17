@@ -1,8 +1,8 @@
 namespace AdventOfCode24.Common;
 
-public readonly record struct Location(int RowIndex, int ColumnIndex)
+public readonly record struct Position(int RowIndex, int ColumnIndex)
 {
-    public Location Move(Direction direction) => new(
+    public Position Move(Direction direction) => new(
         RowIndex + direction.RowOffset,
         ColumnIndex + direction.ColumnOffset);
 }

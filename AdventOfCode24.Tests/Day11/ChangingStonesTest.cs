@@ -17,6 +17,15 @@ public class ChangingStonesTest
     [DataRow(4, 9)]
     [DataRow(5, 13)]
     [DataRow(6, 22)]
+    [DataRow(7, 31)]
+    [DataRow(8, 42)]
+    [DataRow(9, 68)]
+    [DataRow(10, 109)]
+    [DataRow(11, 170)]
+    [DataRow(12, 235)]
+    [DataRow(13, 342)]
+    [DataRow(14, 557)]
+    [DataRow(15, 853)]
     [DataRow(25, 55312)]
     public void NumberOfStonesAfterBlinks_ExampleInput_ShouldReturnCorrectResult(
         int numberOfBlinks, int expectedNumberOfStones)
@@ -29,7 +38,7 @@ public class ChangingStonesTest
     [TestMethod]
     public void NumberOfStonesAfterBlinks_CustomInput_ShouldReturnCorrectResult()
     {
-        var numberOfStones = ChangingStones.NumberOfStonesAfterBlinks3("1", 30);
+        var numberOfStones = ChangingStones.NumberOfStonesAfterBlinks2("1", 30);
 
         Assert.AreEqual(234511, numberOfStones);
     }

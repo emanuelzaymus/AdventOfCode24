@@ -4,6 +4,24 @@ public static class ChangingStones
 {
     private static string Input => File.ReadAllText("Data/day11.txt");
 
+    private const int InvalidStoneNumber = -1;
+
+    private static readonly int[][] StepsForSingleDigits =
+    [
+        /* 0 => */ [1], // (1 step)
+        /* 1 => */ [2, 0, 2, 4], // (3 steps)
+        /* 2 => */ [4, 0, 4, 8], // (3 steps)
+        /* 3 => */ [6, 0, 7, 2], // (3 steps)
+        /* 4 => */ [8, 0, 9, 6], // (3 steps)
+        /* 5 => */ [2, 0, 4, 8, 2, 8, 8, 0], // (5 steps)
+        /* 6 => */ [2, 4, 5, 7, 9, 4, 5, 6], // (5 steps)
+        /* 7 => */ [2, 8, 6, 7, 6, 0, 3, 2], // (5 steps)
+        /* 8 => */ [3, 2, 7, 7, 2, 6, 0, 8], // (5 steps)
+        /* 9 => */ [3, 6, 8, 6, 9, 1, 8, 4], // (5 steps)
+    ];
+
+    private static readonly int[] NumberOfStepsForSingleDigits = [1, 3, 3, 3, 3, 5, 5, 5, 5, 5];
+
     public static void RunTask1()
     {
         var numberOfStones = NumberOfStonesAfterBlinks3(Input, 25);
@@ -15,7 +33,7 @@ public static class ChangingStones
     {
         var numberOfStones = NumberOfStonesAfterBlinks3(Input, 75);
 
-        Console.WriteLine(numberOfStones); //
+        Console.WriteLine(numberOfStones);
     }
 
     public static int NumberOfStonesAfterBlinks(string input, int numberOfBlinks)
@@ -103,7 +121,6 @@ public static class ChangingStones
 
     public static int NumberOfStonesAfterBlinks3(string input, int numberOfBlinks)
     {
-        Console.WriteLine($"numberOfBlinks: {numberOfBlinks}");
         var stones = ParseStones(input);
         return stones.Sum(s =>
         {
@@ -115,31 +132,32 @@ public static class ChangingStones
 
     private static int NumberOfStonesAfterBlinks3(long stone, int numberOfBlinksLeft)
     {
-        int numberOfDigits;
-        long secondStone = -1;
+        switch (stone)
+        {
+            case 0 when numberOfBlinksLeft > 1:
+            case >= 1 and <= 4 when numberOfBlinksLeft > 3:
+            case >= 5 and <= 9 when numberOfBlinksLeft > 5:
+            {
+                var sum = 0;
+                for (var i = 0; i < StepsForSingleDigits[stone].Length; i++)
+                {
+                    sum += NumberOfStonesAfterBlinks3(StepsForSingleDigits[stone][i],
+                        numberOfBlinksLeft - NumberOfStepsForSingleDigits[stone]);
+                }
 
-        if (stone == 0)
-        {
-            stone = 1;
+                return sum;
+            }
         }
-        else if ((numberOfDigits = NumberOfDigits(stone)) % 2 == 0)
-        {
-            var (firstHalf, secondHalf) = SplitNumber(stone, numberOfDigits);
-            stone = firstHalf;
-            secondStone = secondHalf;
-        }
-        else
-        {
-            stone *= 2024;
-        }
+
+        var (firstStone, secondStone) = PerformBlink(stone);
 
         if (numberOfBlinksLeft == 1)
         {
-            return secondStone == -1 ? 1 : 2;
+            return secondStone == InvalidStoneNumber ? 1 : 2;
         }
 
-        return NumberOfStonesAfterBlinks3(stone, numberOfBlinksLeft - 1)
-               + (secondStone != -1
+        return NumberOfStonesAfterBlinks3(firstStone, numberOfBlinksLeft - 1)
+               + (secondStone != InvalidStoneNumber
                    ? NumberOfStonesAfterBlinks3(secondStone, numberOfBlinksLeft - 1)
                    : 0);
     }
@@ -149,6 +167,23 @@ public static class ChangingStones
         return new LinkedList<long>(input
             .Split(' ')
             .Select(long.Parse));
+    }
+
+    private static (long first, long second) PerformBlink(long stone)
+    {
+        if (stone == 0)
+        {
+            return (1, InvalidStoneNumber);
+        }
+
+        int numberOfDigits;
+        if ((numberOfDigits = NumberOfDigits(stone)) % 2 == 0)
+        {
+            var (firstHalf, secondHalf) = SplitNumber(stone, numberOfDigits);
+            return (firstHalf, secondHalf);
+        }
+
+        return (stone * 2024, InvalidStoneNumber);
     }
 
     public static int NumberOfDigits(long number) => (int)Math.Log10(number) + 1;

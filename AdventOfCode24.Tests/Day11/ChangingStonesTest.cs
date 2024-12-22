@@ -21,9 +21,17 @@ public class ChangingStonesTest
     public void NumberOfStonesAfterBlinks_ExampleInput_ShouldReturnCorrectResult(
         int numberOfBlinks, int expectedNumberOfStones)
     {
-        var numberOfStones = ChangingStones.NumberOfStonesAfterBlinks(ExampleInput, numberOfBlinks);
+        var numberOfStones = ChangingStones.NumberOfStonesAfterBlinks3(ExampleInput, numberOfBlinks);
 
         Assert.AreEqual(expectedNumberOfStones, numberOfStones);
+    }
+
+    [TestMethod]
+    public void NumberOfStonesAfterBlinks_CustomInput_ShouldReturnCorrectResult()
+    {
+        var numberOfStones = ChangingStones.NumberOfStonesAfterBlinks3("1", 30);
+
+        Assert.AreEqual(234511, numberOfStones);
     }
 
     [TestMethod]

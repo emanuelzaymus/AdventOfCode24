@@ -85,42 +85,39 @@ public static class GardenFences
         public int Perimeter { get; set; }
         public Dictionary<Direction, List<Position>> RegionSides { get; } = new();
 
-        public int CalculateNumberOfRegionSides()
-        {
-            var sum = 0;
-
-            foreach (var (direction, positions) in RegionSides)
-            {
-                if (direction == Direction.Up || direction == Direction.Down)
+        public int CalculateNumberOfRegionSides() =>
+            RegionSides
+                .Sum(pair =>
                 {
-                    sum += positions
-                        .GroupBy(p => p.RowIndex)
-                        .Sum(g => g
-                            .Select(p => p.ColumnIndex)
+                    var (direction, positions) = pair;
+
+                    var groupSelector = (Position p) => p.RowIndex;
+                    var numberSelector = (Position p) => p.ColumnIndex;
+
+                    if (IsVerticalSide(direction))
+                    {
+                        groupSelector = p => p.ColumnIndex;
+                        numberSelector = p => p.RowIndex;
+                    }
+
+                    return positions
+                        .GroupBy(groupSelector)
+                        .Sum(grouping => grouping
+                            .Select(numberSelector)
                             .Order()
                             .CountNumberOfGaps() + 1);
-                }
-                else
-                {
-                    sum += positions
-                        .GroupBy(p => p.ColumnIndex)
-                        .Sum(g => g
-                            .Select(p => p.RowIndex)
-                            .Order()
-                            .CountNumberOfGaps() + 1);
-                }
-            }
-
-            return sum;
-        }
+                });
     }
+
+    private static bool IsVerticalSide(Direction direction) =>
+        direction == Direction.Left || direction == Direction.Right;
 
     private static int CountNumberOfGaps(this IOrderedEnumerable<int> numberSequence)
     {
         var numbers = numberSequence.ToList();
 
         return numbers
-            .Zip(numbers.Skip(1), (a, b) => b - a)
+            .Zip(numbers.Skip(1), (first, second) => second - first)
             .Count(difference => difference != 1);
     }
 }

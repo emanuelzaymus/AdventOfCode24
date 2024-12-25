@@ -1,5 +1,8 @@
 namespace AdventOfCode24.Day11;
 
+/// <summary>
+/// https://adventofcode.com/2024/day/11
+/// </summary>
 public static class ChangingStones
 {
     private static string Input => File.ReadAllText("Data/day11.txt");

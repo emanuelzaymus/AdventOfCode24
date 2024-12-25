@@ -2,6 +2,9 @@ using AdventOfCode24.Common;
 
 namespace AdventOfCode24.Day12;
 
+/// <summary>
+/// https://adventofcode.com/2024/day/12
+/// </summary>
 public static class GardenFences
 {
     private static string Input => File.ReadAllText("Data/day12.txt");
@@ -10,7 +13,7 @@ public static class GardenFences
     {
         var price = CalculatePriceOfFencesForAllRegions(Input);
 
-        Console.WriteLine(price);
+        Console.WriteLine(price); // 1457298
     }
 
     public static int CalculatePriceOfFencesForAllRegions(string input)

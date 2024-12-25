@@ -2,6 +2,9 @@ using AdventOfCode24.Common;
 
 namespace AdventOfCode24.Day10;
 
+/// <summary>
+/// https://adventofcode.com/2024/day/10
+/// </summary>
 public static class HikingTrails
 {
     private static string Input => File.ReadAllText("Data/day10.txt");

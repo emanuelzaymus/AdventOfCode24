@@ -12,10 +12,13 @@ internal abstract class MapBase<T>(string input, Func<char, T> convert)
         )
         .ToImmutableList();
 
-    public int Height => RowList.Count;
-    public int Width => RowList[0].Count;
+    protected int Height => RowList.Count;
 
-    protected bool Contains(Position position)
+    protected int Width => RowList[0].Count;
+
+    public T this[Position position] => RowList[position.RowIndex][position.ColumnIndex];
+
+    public bool Contains(Position position)
     {
         return position.RowIndex >= 0
                && position.RowIndex < Height

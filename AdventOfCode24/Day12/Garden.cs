@@ -15,18 +15,34 @@ internal class Garden(string input) : MapBase<char>(input, c => c)
         )
         .ToList();
 
+    public IEnumerable<Position> GetAllUncategorizedPositions()
+    {
+        for (var row = 0; row < Height; row++)
+        {
+            for (var col = 0; col < Width; col++)
+            {
+                if (_plantTypeIds[row][col] == InvalidPlantTypeId)
+                {
+                    yield return new Position(row, col);
+                }
+            }
+        }
+    }
+
+    public int GetPlantTypeId(Position position) => _plantTypeIds[position.RowIndex][position.ColumnIndex];
+
     public void SetPlantTypeId(Position position, int plantTypeId)
     {
         _plantTypeIds[position.RowIndex][position.ColumnIndex] = plantTypeId;
     }
 
-    public bool TryGetExistingPlantTypeIdForPosition(Position position, out int foundPlantTypeId)
+    public int GetNumberOfSidesTouchingDifferentPlantType(Position position)
     {
-        return TryGetExistingPlantTypeIdForPosition(position, Direction.Left, out foundPlantTypeId)
-               || TryGetExistingPlantTypeIdForPosition(position, Direction.Up, out foundPlantTypeId);
+        return Direction.AllDirections
+            .Count(direction => !HasSamePlantTypeInDirection(position, direction));
     }
 
-    private bool TryGetExistingPlantTypeIdForPosition(Position position, Direction direction, out int foundPlantTypeId)
+    private bool HasSamePlantTypeInDirection(Position position, Direction direction)
     {
         var currentPlantType = RowList[position.RowIndex][position.ColumnIndex];
 
@@ -34,19 +50,7 @@ internal class Garden(string input) : MapBase<char>(input, c => c)
         var plantType = Contains(newPosition)
             ? RowList[newPosition.RowIndex][newPosition.ColumnIndex]
             : InvalidPlantType;
-        if (plantType == currentPlantType)
-        {
-            foundPlantTypeId = _plantTypeIds[newPosition.RowIndex][newPosition.ColumnIndex];
-            return true;
-        }
 
-        foundPlantTypeId = InvalidPlantTypeId;
-        return false;
-    }
-
-    public int GetNumberOfSidesTouchingDifferentPlantType(Position position)
-    {
-        return Direction.AllDirections
-            .Count(direction => !TryGetExistingPlantTypeIdForPosition(position, direction, out _));
+        return plantType == currentPlantType;
     }
 }

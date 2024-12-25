@@ -16,36 +16,18 @@ public static class GardenFences
     public static int CalculatePriceOfFencesForAllRegions(string input)
     {
         var garden = new Garden(input);
-
         var regions = new List<PlantRegion>();
 
         var nextPlantTypeId = 0;
-
-        for (var row = 0; row < garden.Height; row++)
+        foreach (var uncategorizedPosition in garden.GetAllUncategorizedPositions())
         {
-            for (var col = 0; col < garden.Width; col++)
-            {
-                var currentPosition = new Position(row, col);
+            var plantType = garden[uncategorizedPosition];
+            var newPlantRegion = new PlantRegion(nextPlantTypeId, plantType);
+            regions.Insert(nextPlantTypeId, newPlantRegion);
 
-                var currentPerimeterIncrease = garden.GetNumberOfSidesTouchingDifferentPlantType(currentPosition);
+            CategorizeAllPositionsRecursively(garden, uncategorizedPosition, newPlantRegion);
 
-                if (garden.TryGetExistingPlantTypeIdForPosition(currentPosition, out var foundPlantTypeId))
-                {
-                    if (foundPlantTypeId == Garden.InvalidPlantTypeId)
-                    {
-                        throw new Exception("Plant type id should be set at this point.");
-                    }
-
-                    garden.SetPlantTypeId(currentPosition, foundPlantTypeId);
-                    var foundPlantRegion = regions[foundPlantTypeId];
-                    foundPlantRegion.Area++;
-                    foundPlantRegion.Perimeter += currentPerimeterIncrease;
-                    continue;
-                }
-
-                garden.SetPlantTypeId(currentPosition, nextPlantTypeId++);
-                regions.Add(new PlantRegion(1, currentPerimeterIncrease));
-            }
+            nextPlantTypeId++;
         }
 
         return regions
@@ -53,9 +35,30 @@ public static class GardenFences
             .Sum();
     }
 
-    private record PlantRegion(int Area, int Perimeter)
+    private static void CategorizeAllPositionsRecursively(Garden garden, Position position, PlantRegion plantRegion)
     {
-        public int Area { get; set; } = Area;
-        public int Perimeter { get; set; } = Perimeter;
+        if (!garden.Contains(position)
+            || garden.GetPlantTypeId(position) != Garden.InvalidPlantTypeId
+            || garden[position] != plantRegion.PlantType)
+        {
+            return;
+        }
+
+        garden.SetPlantTypeId(position, plantRegion.PlantTypeId);
+
+        plantRegion.Area++;
+        plantRegion.Perimeter += garden.GetNumberOfSidesTouchingDifferentPlantType(position);
+
+        Direction.AllDirections
+            .ForEach(direction =>
+                CategorizeAllPositionsRecursively(garden, position.Move(direction), plantRegion));
+    }
+
+    private record PlantRegion(int PlantTypeId, char PlantType)
+    {
+        public int PlantTypeId { get; } = PlantTypeId;
+        public char PlantType { get; } = PlantType;
+        public int Area { get; set; }
+        public int Perimeter { get; set; }
     }
 }

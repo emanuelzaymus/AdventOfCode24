@@ -36,10 +36,10 @@ internal class Garden(string input) : MapBase<char>(input, c => c)
         _plantTypeIds[position.RowIndex][position.ColumnIndex] = plantTypeId;
     }
 
-    public int GetNumberOfSidesTouchingDifferentPlantType(Position position)
+    public IEnumerable<Direction> GetSidesTouchingDifferentPlantType(Position position)
     {
         return Direction.AllDirections
-            .Count(direction => !HasSamePlantTypeInDirection(position, direction));
+            .Where(direction => !HasSamePlantTypeInDirection(position, direction));
     }
 
     private bool HasSamePlantTypeInDirection(Position position, Direction direction)

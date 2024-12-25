@@ -8,12 +8,12 @@ namespace AdventOfCode24.Tests.Day12;
 [TestSubject(typeof(GardenFences))]
 public class GardenFencesTest
 {
-    private const string ExampleInput = """
-                                        AAAA
-                                        BBCD
-                                        BBCC
-                                        EEEC
-                                        """;
+    private const string ExampleInput1 = """
+                                         AAAA
+                                         BBCD
+                                         BBCC
+                                         EEEC
+                                         """;
 
     private const string ExampleInput2 = """
                                          OOOOO
@@ -36,27 +36,46 @@ public class GardenFencesTest
                                          MMMISSJEEE
                                          """;
 
-    [TestMethod]
-    public void CalculatePriceOfFencesForAllRegions_ExampleInput_ShouldReturnCorrectResult()
-    {
-        var price = GardenFences.CalculatePriceOfFencesForAllRegions(ExampleInput);
+    private const string ExampleInput4 = """
+                                         EEEEE
+                                         EXXXX
+                                         EEEEE
+                                         EXXXX
+                                         EEEEE
+                                         """;
 
-        Assert.AreEqual(140, price);
+    private const string ExampleInput5 = """
+                                         AAAAAA
+                                         AAABBA
+                                         AAABBA
+                                         ABBAAA
+                                         ABBAAA
+                                         AAAAAA
+                                         """;
+
+
+    [TestMethod]
+    [DataRow(ExampleInput1, 140, DisplayName = "Example 1")]
+    [DataRow(ExampleInput2, 772, DisplayName = "Example 2")]
+    [DataRow(ExampleInput3, 1930, DisplayName = "Example 3")]
+    public void CalculatePriceOfFencesForAllRegions_ExampleInput_ShouldReturnCorrectResult(string input, int expected)
+    {
+        var price = GardenFences.CalculatePriceOfFencesForAllRegions(input);
+
+        Assert.AreEqual(expected, price);
     }
 
     [TestMethod]
-    public void CalculatePriceOfFencesForAllRegions_ExampleInput2_ShouldReturnCorrectResult()
+    [DataRow(ExampleInput1, 80, DisplayName = "Example 1")]
+    [DataRow(ExampleInput2, 436, DisplayName = "Example 2")]
+    [DataRow(ExampleInput3, 1206, DisplayName = "Example 3")]
+    [DataRow(ExampleInput4, 236, DisplayName = "Example 4")]
+    [DataRow(ExampleInput5, 368, DisplayName = "Example 5")]
+    public void CalculatePriceOfFencesForAllRegionsWithDiscount_ExampleInput_ShouldReturnCorrectResult(
+        string input, int expected)
     {
-        var price = GardenFences.CalculatePriceOfFencesForAllRegions(ExampleInput2);
+        var price = GardenFences.CalculatePriceOfFencesForAllRegions(input, withDiscount: true);
 
-        Assert.AreEqual(772, price);
-    }
-
-    [TestMethod]
-    public void CalculatePriceOfFencesForAllRegions_ExampleInput3_ShouldReturnCorrectResult()
-    {
-        var price = GardenFences.CalculatePriceOfFencesForAllRegions(ExampleInput3);
-
-        Assert.AreEqual(1930, price);
+        Assert.AreEqual(expected, price);
     }
 }

@@ -16,7 +16,14 @@ public static class GardenFences
         Console.WriteLine(price); // 1457298
     }
 
-    public static int CalculatePriceOfFencesForAllRegions(string input)
+    public static void RunTask2()
+    {
+        var price = CalculatePriceOfFencesForAllRegions(Input, withDiscount: true);
+
+        Console.WriteLine(price); // 921636
+    }
+
+    public static int CalculatePriceOfFencesForAllRegions(string input, bool withDiscount = false)
     {
         var garden = new Garden(input);
         var regions = new List<PlantRegion>();
@@ -34,7 +41,7 @@ public static class GardenFences
         }
 
         return regions
-            .Select(r => r.Area * r.Perimeter)
+            .Select(r => r.Area * (withDiscount ? r.CalculateNumberOfRegionSides() : r.Perimeter))
             .Sum();
     }
 
@@ -49,8 +56,21 @@ public static class GardenFences
 
         garden.SetPlantTypeId(position, plantRegion.PlantTypeId);
 
+        foreach (var touchingDirection in garden.GetSidesTouchingDifferentPlantType(position))
+        {
+            if (plantRegion.RegionSides.TryGetValue(touchingDirection, out var foundRegionSides))
+            {
+                foundRegionSides.Add(position);
+            }
+            else
+            {
+                plantRegion.RegionSides.Add(touchingDirection, [position]);
+            }
+
+            plantRegion.Perimeter++;
+        }
+
         plantRegion.Area++;
-        plantRegion.Perimeter += garden.GetNumberOfSidesTouchingDifferentPlantType(position);
 
         Direction.AllDirections
             .ForEach(direction =>
@@ -63,5 +83,44 @@ public static class GardenFences
         public char PlantType { get; } = PlantType;
         public int Area { get; set; }
         public int Perimeter { get; set; }
+        public Dictionary<Direction, List<Position>> RegionSides { get; } = new();
+
+        public int CalculateNumberOfRegionSides()
+        {
+            var sum = 0;
+
+            foreach (var (direction, positions) in RegionSides)
+            {
+                if (direction == Direction.Up || direction == Direction.Down)
+                {
+                    sum += positions
+                        .GroupBy(p => p.RowIndex)
+                        .Sum(g => g
+                            .Select(p => p.ColumnIndex)
+                            .Order()
+                            .CountNumberOfGaps() + 1);
+                }
+                else
+                {
+                    sum += positions
+                        .GroupBy(p => p.ColumnIndex)
+                        .Sum(g => g
+                            .Select(p => p.RowIndex)
+                            .Order()
+                            .CountNumberOfGaps() + 1);
+                }
+            }
+
+            return sum;
+        }
+    }
+
+    private static int CountNumberOfGaps(this IOrderedEnumerable<int> numberSequence)
+    {
+        var numbers = numberSequence.ToList();
+
+        return numbers
+            .Zip(numbers.Skip(1), (a, b) => b - a)
+            .Count(difference => difference != 1);
     }
 }

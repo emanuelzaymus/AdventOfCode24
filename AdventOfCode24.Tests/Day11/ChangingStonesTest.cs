@@ -30,7 +30,7 @@ public class ChangingStonesTest
     public void NumberOfStonesAfterBlinks_ExampleInput_ShouldReturnCorrectResult(
         int numberOfBlinks, int expectedNumberOfStones)
     {
-        var numberOfStones = ChangingStones.NumberOfStonesAfterBlinks3(ExampleInput, numberOfBlinks);
+        var numberOfStones = ChangingStones.NumberOfStonesAfterBlinks(ExampleInput, numberOfBlinks);
 
         Assert.AreEqual(expectedNumberOfStones, numberOfStones);
     }
@@ -38,7 +38,7 @@ public class ChangingStonesTest
     [TestMethod]
     public void NumberOfStonesAfterBlinks_CustomInput_ShouldReturnCorrectResult()
     {
-        var numberOfStones = ChangingStones.NumberOfStonesAfterBlinks2("1", 30);
+        var numberOfStones = ChangingStones.NumberOfStonesAfterBlinks("1", 30);
 
         Assert.AreEqual(234511, numberOfStones);
     }

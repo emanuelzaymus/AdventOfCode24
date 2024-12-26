@@ -87,20 +87,13 @@ public static class ChangingStones
     {
         var splittingCoefficient = CalculateSplittingCoefficient(numberOfDigits);
         var firstHalf = GetFirstHalfOfNumber(number, splittingCoefficient);
-        var secondHalf = GetSecondHalfOfNumber(number, firstHalf, splittingCoefficient);
+        var secondHalf = GetSecondHalfOfNumber(number, splittingCoefficient);
         return (firstHalf, secondHalf);
     }
 
-    private static long CalculateSplittingCoefficient(long numberOfDigits)
-    {
-        var halfOfDigits = numberOfDigits / 2;
-        return (long)Math.Pow(10, halfOfDigits);
-    }
+    private static long CalculateSplittingCoefficient(long numberOfDigits) => (long)Math.Pow(10, numberOfDigits / 2.0);
 
     private static long GetFirstHalfOfNumber(long number, long splittingCoefficient) => number / splittingCoefficient;
 
-    private static long GetSecondHalfOfNumber(long number, long firstHalfOfNumber, long splittingCoefficient)
-    {
-        return number - firstHalfOfNumber * splittingCoefficient;
-    }
+    private static long GetSecondHalfOfNumber(long number, long splittingCoefficient) => number % splittingCoefficient;
 }

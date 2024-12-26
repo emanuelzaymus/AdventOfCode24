@@ -1,3 +1,4 @@
+using System.Collections.Immutable;
 using AdventOfCode24.Common;
 
 namespace AdventOfCode24.Day12;
@@ -58,14 +59,7 @@ public static class GardenFences
 
         foreach (var touchingDirection in garden.GetSidesTouchingDifferentPlantType(position))
         {
-            if (plantRegion.RegionSides.TryGetValue(touchingDirection, out var foundRegionSides))
-            {
-                foundRegionSides.Add(position);
-            }
-            else
-            {
-                plantRegion.RegionSides.Add(touchingDirection, [position]);
-            }
+            plantRegion.RegionSides[touchingDirection].Add(position);
 
             plantRegion.Perimeter++;
         }
@@ -79,22 +73,24 @@ public static class GardenFences
 
     private record PlantRegion(int PlantTypeId, char PlantType)
     {
-        public int PlantTypeId { get; } = PlantTypeId;
-        public char PlantType { get; } = PlantType;
+        public readonly int PlantTypeId = PlantTypeId;
+        public readonly char PlantType = PlantType;
         public int Area { get; set; }
         public int Perimeter { get; set; }
-        public Dictionary<Direction, List<Position>> RegionSides { get; } = new();
+
+        public readonly ImmutableList<List<Position>> RegionSides = Enumerable
+            .Range(0, Direction.AllDirections.Count)
+            .Select(_ => new List<Position>())
+            .ToImmutableList();
 
         public int CalculateNumberOfRegionSides() =>
             RegionSides
-                .Sum(pair =>
+                .Select((positions, directionCode) =>
                 {
-                    var (direction, positions) = pair;
-
                     var groupSelector = (Position p) => p.RowIndex;
                     var numberSelector = (Position p) => p.ColumnIndex;
 
-                    if (IsVerticalSide(direction))
+                    if (IsVerticalSide(directionCode))
                     {
                         groupSelector = p => p.ColumnIndex;
                         numberSelector = p => p.RowIndex;
@@ -106,7 +102,8 @@ public static class GardenFences
                             .Select(numberSelector)
                             .Order()
                             .CountNumberOfGaps() + 1);
-                });
+                })
+                .Sum();
     }
 
     private static bool IsVerticalSide(Direction direction) =>

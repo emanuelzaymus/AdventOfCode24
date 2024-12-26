@@ -18,13 +18,11 @@ internal class Garden(string input) : MapBase<char>(input, c => c)
     public IEnumerable<Position> GetAllUncategorizedPositions()
     {
         for (var row = 0; row < Height; row++)
+        for (var col = 0; col < Width; col++)
         {
-            for (var col = 0; col < Width; col++)
+            if (_plantTypeIds[row][col] == InvalidPlantTypeId)
             {
-                if (_plantTypeIds[row][col] == InvalidPlantTypeId)
-                {
-                    yield return new Position(row, col);
-                }
+                yield return new Position(row, col);
             }
         }
     }

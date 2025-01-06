@@ -65,10 +65,26 @@ public static class ClawMachines
             .ToList();
     }
 
-
+    /// <summary>
+    /// X1*a + X2*b = X3
+    /// Y1*a + Y2*b = Y3
+    /// </summary>
     private record ClawMachine(int X1, int X2, int X3, int Y1, int Y2, int Y3)
     {
-        public double CalculateB() => (Y3 * X1 - X3 * Y1) / (double)(Y2 * X1 - X2 * Y1);
+        /// <summary>
+        /// Y1*a + Y2*b = Y3
+        /// (Y1*(X3 - X2*b)) / X1 + Y2*b = Y3
+        /// Y1*X3 - Y1*X2*b + Y2*X1*b = Y3*X1
+        /// Y2*X1*b - Y1*X2*b = Y3*X1 - Y1*X3
+        /// b*(Y2*X1 - Y1*X2) = Y3*X1 - Y1*X3
+        /// b = (Y3*X1 - Y1*X3) / (Y2*X1 - Y1*X2)
+        /// </summary>
+        public double CalculateB() => (Y3 * X1 - Y1 * X3) / (double)(Y2 * X1 - Y1 * X2);
+
+        /// <summary>
+        /// X1*a + X2*b = X3
+        /// a = (X3 - X2*b) / X1
+        /// </summary>
         public double CalculateA(double b) => (X3 - X2 * b) / X1;
     };
 }

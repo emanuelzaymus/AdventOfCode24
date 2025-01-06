@@ -4,6 +4,8 @@ namespace AdventOfCode24.Day13;
 
 public static class ClawMachines
 {
+    private const long PrizePositionCoefficient = 10000000000000;
+
     private static string Input => File.ReadAllText("Data/day13.txt");
 
     public static void RunTask1()
@@ -13,16 +15,24 @@ public static class ClawMachines
         Console.WriteLine(numberOfTokens); // 27157
     }
 
-    public static int CalculateFewestNumberOfTokensToWinAllPossibleClawMachines(string input)
+    public static void RunTask2()
     {
-        var clawMachines = ParseClawMachines(input);
+        var numberOfTokens = CalculateFewestNumberOfTokensToWinAllPossibleClawMachines(Input, withCoefficient: true);
+
+        Console.WriteLine(numberOfTokens); // 104015411578548
+    }
+
+    public static long CalculateFewestNumberOfTokensToWinAllPossibleClawMachines(string input,
+        bool withCoefficient = false)
+    {
+        var clawMachines = ParseClawMachines(input, withCoefficient);
 
         return clawMachines
             .Select(CalculateRoots)
             .Sum(roots => roots is { } r ? r.a * 3 + r.b : 0);
     }
 
-    private static (int a, int b)? CalculateRoots(ClawMachine machine)
+    private static (long a, long b)? CalculateRoots(ClawMachine machine)
     {
         var b = machine.CalculateB();
         if (!IsRoundNumber(b))
@@ -36,16 +46,16 @@ public static class ClawMachines
             return null;
         }
 
-        return ((int)a, (int)b);
+        return ((long)a, (long)b);
     }
 
     private static bool IsRoundNumber(double number)
     {
-        var integer = (int)number;
-        return Math.Abs(number - integer) < 0.000001;
+        var truncated = (long)number;
+        return Math.Abs(number - truncated) < 0.000001;
     }
 
-    private static List<ClawMachine> ParseClawMachines(string input)
+    private static List<ClawMachine> ParseClawMachines(string input, bool withCoefficient)
     {
         return input
             .Split("\n\n")
@@ -53,14 +63,16 @@ public static class ClawMachines
             {
                 var lines = machine.SplitLines();
 
-                var x1 = int.Parse(lines[0].SubstringAfter("X+").SubstringBefore(", "));
-                var y1 = int.Parse(lines[0].SubstringAfter("Y+"));
-                var x2 = int.Parse(lines[1].SubstringAfter("X+").SubstringBefore(", "));
-                var y2 = int.Parse(lines[1].SubstringAfter("Y+"));
-                var x3 = int.Parse(lines[2].SubstringAfter("X=").SubstringBefore(", "));
-                var y3 = int.Parse(lines[2].SubstringAfter("Y="));
+                var x1 = long.Parse(lines[0].SubstringAfter("X+").SubstringBefore(", "));
+                var y1 = long.Parse(lines[0].SubstringAfter("Y+"));
+                var x2 = long.Parse(lines[1].SubstringAfter("X+").SubstringBefore(", "));
+                var y2 = long.Parse(lines[1].SubstringAfter("Y+"));
+                var x3 = long.Parse(lines[2].SubstringAfter("X=").SubstringBefore(", "));
+                var y3 = long.Parse(lines[2].SubstringAfter("Y="));
 
-                return new ClawMachine(x1, x2, x3, y1, y2, y3);
+                return withCoefficient
+                    ? new ClawMachine(x1, x2, x3 + PrizePositionCoefficient, y1, y2, y3 + PrizePositionCoefficient)
+                    : new ClawMachine(x1, x2, x3, y1, y2, y3);
             })
             .ToList();
     }
@@ -69,21 +81,21 @@ public static class ClawMachines
     /// X1*a + X2*b = X3
     /// Y1*a + Y2*b = Y3
     /// </summary>
-    private record ClawMachine(int X1, int X2, int X3, int Y1, int Y2, int Y3)
+    private record ClawMachine(long X1, long X2, long X3, long Y1, long Y2, long Y3)
     {
         /// <summary>
-        /// Y1*a + Y2*b = Y3
+        ///                  Y1*a + Y2*b = Y3
         /// (Y1*(X3 - X2*b)) / X1 + Y2*b = Y3
-        /// Y1*X3 - Y1*X2*b + Y2*X1*b = Y3*X1
-        /// Y2*X1*b - Y1*X2*b = Y3*X1 - Y1*X3
-        /// b*(Y2*X1 - Y1*X2) = Y3*X1 - Y1*X3
-        /// b = (Y3*X1 - Y1*X3) / (Y2*X1 - Y1*X2)
+        ///    Y1*X3 - Y1*X2*b + Y2*X1*b = Y3*X1
+        ///            Y2*X1*b - Y1*X2*b = Y3*X1 - Y1*X3
+        ///            b*(Y2*X1 - Y1*X2) = Y3*X1 - Y1*X3
+        ///                            b = (Y3*X1 - Y1*X3) / (Y2*X1 - Y1*X2)
         /// </summary>
         public double CalculateB() => (Y3 * X1 - Y1 * X3) / (double)(Y2 * X1 - Y1 * X2);
 
         /// <summary>
         /// X1*a + X2*b = X3
-        /// a = (X3 - X2*b) / X1
+        ///           a = (X3 - X2*b) / X1
         /// </summary>
         public double CalculateA(double b) => (X3 - X2 * b) / X1;
     };

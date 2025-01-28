@@ -16,6 +16,12 @@ public static class StringExtensions
         return (transform(pair[0]), transform(pair[1]));
     }
 
+    public static (string first, string second) SplitPair(this string str, string separator)
+    {
+        var pair = str.Split(separator, 2);
+        return (pair[0], pair[1]);
+    }
+
     public static string SubstringAfter(this string str, string separator)
     {
         var startIndex = str.IndexOf(separator, StringComparison.Ordinal) + separator.Length;

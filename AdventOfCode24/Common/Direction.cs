@@ -37,6 +37,16 @@ internal class Direction
         AllDirections.SingleOrDefault(direction => direction == code)
         ?? throw new ArgumentOutOfRangeException(nameof(code), "Value must be between 0 and 3.");
 
+    public static Direction FromChar(char character) => character switch
+    {
+        '^' => Up,
+        '>' => Right,
+        'v' => Down,
+        '<' => Left,
+        _ => throw new ArgumentOutOfRangeException(nameof(character),
+            "Value must be between one of '^', '>', 'v' or '<'.")
+    };
+
     public override int GetHashCode() => _code;
 
     public override string ToString()

@@ -1,3 +1,4 @@
+using System.Text;
 using AdventOfCode24.Common;
 
 namespace AdventOfCode24.Day15;
@@ -13,9 +14,16 @@ public static class RobotShiftingBoxes
         Console.WriteLine(result); // 1421727
     }
 
-    public static int CalculateSumOfBoxesPositions(string input)
+    public static void RunTask2()
     {
-        var (warehouse, moves) = ParseWarehouseAndMoves(input);
+        var result = CalculateSumOfBoxesPositions(Input, twiceAsWide: true);
+
+        Console.WriteLine(result);
+    }
+
+    public static int CalculateSumOfBoxesPositions(string input, bool twiceAsWide = false)
+    {
+        var (warehouse, moves) = ParseWarehouseAndMoves(input, twiceAsWide);
 
         foreach (var direction in moves)
         {
@@ -25,11 +33,18 @@ public static class RobotShiftingBoxes
         return warehouse.CalculateSumOfBoxesPositions();
     }
 
-    private static (Warehouse warehouse, List<Direction> moves) ParseWarehouseAndMoves(string input)
+    private static (Warehouse warehouse, List<Direction> moves) ParseWarehouseAndMoves(string input, bool twiceAsWide)
     {
         var (warehouseStr, movesStr) = input.SplitPair("\n\n");
 
-        var warehouse = new Warehouse(warehouseStr);
+        if (twiceAsWide)
+        {
+            warehouseStr = warehouseStr
+                .Aggregate(new StringBuilder(), (sb, c) => c == '\n' ? sb.Append(c) : sb.Append(MakeTwiceAsWide(c)))
+                .ToString();
+        }
+
+        Warehouse warehouse = twiceAsWide ? new WideWarehouse(warehouseStr) : new NormalWarehouse(warehouseStr);
         var moves = movesStr
             .Select(c => c)
             .Where(c => c != '\n')
@@ -37,5 +52,18 @@ public static class RobotShiftingBoxes
             .ToList();
 
         return (warehouse, moves);
+    }
+
+    private static string MakeTwiceAsWide(char character)
+    {
+        return character switch
+        {
+            '#' => "##",
+            'O' => "[]",
+            '.' => "..",
+            '@' => "@.",
+            _ => throw new ArgumentOutOfRangeException(nameof(character),
+                "Value must be between one of '#', 'O', '.' or '@'.")
+        };
     }
 }

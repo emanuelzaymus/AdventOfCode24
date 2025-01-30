@@ -92,6 +92,11 @@ internal class WideWarehouse(string input) : Warehouse(input)
 
         MoveUpDown(currentPosition.Move(direction), direction, currentCharacter);
 
+        if (previousCharacter == Empty || previousCharacter == currentCharacter)
+        {
+            return;
+        }
+
         switch (currentCharacter)
         {
             case BoxLeft: MoveUpDown(currentPosition.Move(Direction.Right), direction, Empty); break;

@@ -85,7 +85,9 @@ public class RobotShiftingBoxesTest
     [TestMethod]
     public void CalculateSumOfBoxesPositionsTwiceAsWide_SmallerExampleInputForTask2_ShouldReturnCorrectResult()
     {
-        var result = RobotShiftingBoxes.CalculateSumOfBoxesPositions(SmallerExampleInputForTask2, twiceAsWide: true);
+        var result =
+            RobotShiftingBoxes.CalculateSumOfBoxesPositions(SmallerExampleInputForTask2, twiceAsWide: true,
+                printOutput: true);
 
         Assert.AreEqual((100 * 1 + 5) + (100 * 2 + 7) + (100 * 3 + 6), result);
     }

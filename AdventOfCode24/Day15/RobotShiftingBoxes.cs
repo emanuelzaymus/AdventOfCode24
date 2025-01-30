@@ -18,10 +18,10 @@ public static class RobotShiftingBoxes
     {
         var result = CalculateSumOfBoxesPositions(Input, twiceAsWide: true);
 
-        Console.WriteLine(result);
+        Console.WriteLine(result); // 1463160
     }
 
-    public static int CalculateSumOfBoxesPositions(string input, bool twiceAsWide = false)
+    public static int CalculateSumOfBoxesPositions(string input, bool twiceAsWide = false, bool printOutput = false)
     {
         var (warehouse, moves) = ParseWarehouseAndMoves(input, twiceAsWide);
 
@@ -29,6 +29,7 @@ public static class RobotShiftingBoxes
         {
             warehouse.MoveRobot(direction);
 
+            if (!printOutput) return;
             Console.WriteLine($"Move {index + 1}: {direction}");
             Console.WriteLine(warehouse.ToString());
             Console.WriteLine();

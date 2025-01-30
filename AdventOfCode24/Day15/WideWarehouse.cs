@@ -7,19 +7,7 @@ internal class WideWarehouse(string input) : Warehouse(input)
     private const char BoxLeft = '[';
     private const char BoxRight = ']';
 
-    public override void MoveRobot(Direction direction)
-    {
-        if (!CanRobotMove(RobotPosition, direction))
-        {
-            return;
-        }
-
-        Move(RobotPosition, direction, Empty);
-
-        RobotPosition = RobotPosition.Move(direction);
-    }
-
-    private bool CanRobotMove(Position currentPosition, Direction direction)
+    protected override bool CanRobotMove(Position currentPosition, Direction direction)
     {
         var nextPosition = currentPosition.Move(direction);
 
@@ -51,7 +39,7 @@ internal class WideWarehouse(string input) : Warehouse(input)
         }
     }
 
-    private void Move(Position currentPosition, Direction direction, char previousCharacter)
+    protected override void Move(Position currentPosition, Direction direction, char previousCharacter)
     {
         if (direction == Direction.Left || direction == Direction.Right)
         {

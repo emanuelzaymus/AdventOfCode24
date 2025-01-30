@@ -8,16 +8,30 @@ internal abstract class Warehouse : MutableMapBase<char>
     protected const char Wall = '#';
     protected const char Robot = '@';
 
-    protected Position RobotPosition;
+    private Position _robotPosition;
 
     protected Warehouse(string input) : base(input, c => c)
     {
         var rowIndex = RowList.FindIndex(row => row.Contains(Robot));
         var colIndex = RowList[rowIndex].FindIndex(c => c == Robot);
-        RobotPosition = new Position(rowIndex, colIndex);
+        _robotPosition = new Position(rowIndex, colIndex);
     }
 
-    public abstract void MoveRobot(Direction direction);
+    public void MoveRobot(Direction direction)
+    {
+        if (!CanRobotMove(_robotPosition, direction))
+        {
+            return;
+        }
+
+        Move(_robotPosition, direction, Empty);
+
+        _robotPosition = _robotPosition.Move(direction);
+    }
+
+    protected abstract bool CanRobotMove(Position currentPosition, Direction direction);
+
+    protected abstract void Move(Position currentPosition, Direction direction, char previousCharacter);
 
     public abstract int CalculateSumOfBoxesPositions();
 

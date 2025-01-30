@@ -41,35 +41,6 @@ internal class WideWarehouse(string input) : Warehouse(input)
 
     protected override void Move(Position currentPosition, Direction direction, char previousCharacter)
     {
-        if (direction == Direction.Left || direction == Direction.Right)
-        {
-            MoveLeftRight(currentPosition, direction, previousCharacter);
-        }
-        else
-        {
-            MoveUpDown(currentPosition, direction, previousCharacter);
-        }
-    }
-
-    private void MoveLeftRight(Position currentPosition, Direction direction, char previousCharacter)
-    {
-        while (true)
-        {
-            var currentCharacter = this[currentPosition];
-            this[currentPosition] = previousCharacter;
-
-            if (currentCharacter == Empty)
-            {
-                return;
-            }
-
-            currentPosition = currentPosition.Move(direction);
-            previousCharacter = currentCharacter;
-        }
-    }
-
-    private void MoveUpDown(Position currentPosition, Direction direction, char previousCharacter)
-    {
         var currentCharacter = this[currentPosition];
         this[currentPosition] = previousCharacter;
 
@@ -78,17 +49,15 @@ internal class WideWarehouse(string input) : Warehouse(input)
             return;
         }
 
-        MoveUpDown(currentPosition.Move(direction), direction, currentCharacter);
+        Move(currentPosition.Move(direction), direction, currentCharacter);
 
-        if (previousCharacter == Empty || previousCharacter == currentCharacter)
-        {
-            return;
-        }
+        if (direction == Direction.Left || direction == Direction.Right ||
+            previousCharacter == Empty || previousCharacter == currentCharacter) return;
 
         switch (currentCharacter)
         {
-            case BoxLeft: MoveUpDown(currentPosition.Move(Direction.Right), direction, Empty); break;
-            case BoxRight: MoveUpDown(currentPosition.Move(Direction.Left), direction, Empty); break;
+            case BoxLeft: Move(currentPosition.Move(Direction.Right), direction, Empty); break;
+            case BoxRight: Move(currentPosition.Move(Direction.Left), direction, Empty); break;
             case Robot: break;
             default: throw new InvalidOperationException($"Unknown currentCharacter {currentCharacter}");
         }

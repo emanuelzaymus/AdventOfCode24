@@ -6,8 +6,7 @@ internal abstract class Warehouse : MutableMapBase<char>
 {
     protected const char Empty = '.';
     protected const char Wall = '#';
-    protected const char Box = 'O';
-    private const char Robot = '@';
+    protected const char Robot = '@';
 
     protected Position RobotPosition;
 
@@ -21,4 +20,20 @@ internal abstract class Warehouse : MutableMapBase<char>
     public abstract void MoveRobot(Direction direction);
 
     public abstract int CalculateSumOfBoxesPositions();
+
+    protected int CalculateSumOfBoxesPositions(char box)
+    {
+        var result = 0;
+
+        for (var row = 0; row < Height; row++)
+        for (var col = 0; col < Width; col++)
+        {
+            if (RowList[row][col] == box)
+            {
+                result += 100 * row + col;
+            }
+        }
+
+        return result;
+    }
 }

@@ -25,10 +25,14 @@ public static class RobotShiftingBoxes
     {
         var (warehouse, moves) = ParseWarehouseAndMoves(input, twiceAsWide);
 
-        foreach (var direction in moves)
+        moves.ForEachIndexed((direction, index) =>
         {
             warehouse.MoveRobot(direction);
-        }
+
+            Console.WriteLine($"Move {index + 1}: {direction}");
+            Console.WriteLine(warehouse.ToString());
+            Console.WriteLine();
+        });
 
         return warehouse.CalculateSumOfBoxesPositions();
     }

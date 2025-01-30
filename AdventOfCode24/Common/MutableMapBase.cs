@@ -19,4 +19,9 @@ internal abstract class MutableMapBase<T>(string input, Func<char, T> convert)
         get => RowList[position.RowIndex][position.ColumnIndex];
         set => RowList[position.RowIndex][position.ColumnIndex] = value;
     }
+
+    public override string ToString() => string.Join(
+        Environment.NewLine,
+        RowList.Select(row => string.Join(string.Empty, row))
+    );
 }

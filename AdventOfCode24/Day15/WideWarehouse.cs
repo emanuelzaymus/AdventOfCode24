@@ -4,6 +4,9 @@ namespace AdventOfCode24.Day15;
 
 internal class WideWarehouse(string input) : Warehouse(input)
 {
+    private const char BoxLeft = '[';
+    private const char BoxRight = ']';
+
     public override void MoveRobot(Direction direction)
     {
         if (!CanRobotMove(RobotPosition, direction))
@@ -24,12 +27,43 @@ internal class WideWarehouse(string input) : Warehouse(input)
         {
             Wall => false,
             Empty => true,
-            Box => CanRobotMove(nextPosition, direction),
+            BoxLeft => CanRobotMoveWideBox(),
+            BoxRight => CanRobotMoveWideBox(),
             _ => throw new InvalidOperationException($"Unknown character {this[nextPosition]}")
         };
+
+        bool CanRobotMoveWideBox()
+        {
+            if (direction == Direction.Left || direction == Direction.Right)
+            {
+                return CanRobotMove(nextPosition, direction);
+            }
+
+            return this[nextPosition] switch
+            {
+                BoxLeft => CanRobotMove(nextPosition, direction)
+                           && CanRobotMove(nextPosition.Move(Direction.Right), direction),
+                BoxRight => CanRobotMove(nextPosition, direction)
+                            && CanRobotMove(nextPosition.Move(Direction.Left), direction),
+                _ => throw new InvalidOperationException(
+                    $"Unknown character {this[nextPosition]}. Expected are only {BoxLeft} and {BoxRight}.")
+            };
+        }
     }
 
     private void Move(Position currentPosition, Direction direction, char previousCharacter)
+    {
+        if (direction == Direction.Left || direction == Direction.Right)
+        {
+            MoveLeftRight(currentPosition, direction, previousCharacter);
+        }
+        else
+        {
+            MoveUpDown(currentPosition, direction, previousCharacter);
+        }
+    }
+
+    private void MoveLeftRight(Position currentPosition, Direction direction, char previousCharacter)
     {
         while (true)
         {
@@ -46,19 +80,26 @@ internal class WideWarehouse(string input) : Warehouse(input)
         }
     }
 
-    public override int CalculateSumOfBoxesPositions()
+    private void MoveUpDown(Position currentPosition, Direction direction, char previousCharacter)
     {
-        var result = 0;
+        var currentCharacter = this[currentPosition];
+        this[currentPosition] = previousCharacter;
 
-        for (var row = 0; row < Height; row++)
-        for (var col = 0; col < Width; col++)
+        if (currentCharacter == Empty)
         {
-            if (RowList[row][col] == Box)
-            {
-                result += 100 * row + col;
-            }
+            return;
         }
 
-        return result;
+        MoveUpDown(currentPosition.Move(direction), direction, currentCharacter);
+
+        switch (currentCharacter)
+        {
+            case BoxLeft: MoveUpDown(currentPosition.Move(Direction.Right), direction, Empty); break;
+            case BoxRight: MoveUpDown(currentPosition.Move(Direction.Left), direction, Empty); break;
+            case Robot: break;
+            default: throw new InvalidOperationException($"Unknown currentCharacter {currentCharacter}");
+        }
     }
+
+    public override int CalculateSumOfBoxesPositions() => CalculateSumOfBoxesPositions(BoxLeft);
 }
